@@ -71,7 +71,7 @@ public class ShowWatchListCommand extends AbstractCommand {
         String active = (sub.getCurrentlyWatched()) ? ":white_check_mark:" : ":x:";
         return "**"+sub.getSubreddit()+"**\n" +
                 "sort by: **"+sub.getSortBy()+"**\n" +
-                "channel: #"+sub.getTextChannelName()+"\n" +
+                "channel: "+sub.getTextChannelMention()+"\n" +
                 "active: "+active+"\n";
     }
 }

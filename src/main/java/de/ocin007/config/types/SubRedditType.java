@@ -86,8 +86,8 @@ public class SubRedditType {
         return textChannel;
     }
 
-    public String getTextChannelName() {
-        return Bot.getShardManager().getTextChannelById(textChannel).getName();
+    public String getTextChannelMention() {
+        return Bot.getShardManager().getTextChannelById(textChannel).getAsMention();
     }
 
     public void setTextChannel(String textChannel) {
