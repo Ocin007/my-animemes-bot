@@ -32,4 +32,4 @@ my-animemes-bot.iml
 /src/main/resources/config.properties
 
 # whatchlist
-#/src/main/resources/json/currentlyWatchedSubReddits.json
+/src/main/resources/json/currentlyWatchedSubReddits.json
