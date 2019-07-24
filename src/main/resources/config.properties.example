@@ -1,0 +1,17 @@
+# bot token for discord
+botToken=
+
+# reddit api stuff
+clientId=
+clientSecret=
+
+
+
+
+
+
+#//////////////////// DONT EDIT ////////////////////
+
+redditToken=
+redditRefreshToken=
+redditRefreshTimestamp=0
