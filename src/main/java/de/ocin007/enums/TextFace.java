@@ -8,7 +8,9 @@ public enum TextFace {
     CONFOUNDED("(ᵕ﹏ᵕ)"),
     TABLE_FLIP("(ノಠ益ಠ)ノ┻━┻"),
     SHAME("(_　_|||)"),
-    REALLY("(；一ω一||)");
+    REALLY("(；一ω一||)"),
+    SERIOUS("(ー_ー )"),
+    WATCHING("(⊍-⊍)");
 
     private String name;
 

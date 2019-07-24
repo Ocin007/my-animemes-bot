@@ -36,7 +36,7 @@ public class HelpCommand extends AbstractCommand {
     public void execute(MessageReceivedEvent event, String[] args) {
         this.msg = "All available commands:\n\n";
         this.cmdList.forEach(cmd -> this.msg += "```"+
-                cmd.getCmdSignature()+"```\n" +
+                cmd.getCmdSignature()+"```" +
                 cmd.getCmdDescription()+"\n\n"
         );
         event.getTextChannel().sendMessage(this.msg).queue();

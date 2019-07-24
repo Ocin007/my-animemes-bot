@@ -9,6 +9,7 @@ public enum Cmd implements ConfigEnum {
     REMOVE_SUBREDDIT("cmdRemoveSubReddit"),
     EDIT_SUBREDDIT("cmdEditSubReddit"),
     SHOW("cmdShowWatchList"),
+    WATCH("cmdWatch"),
     SHUTDOWN("cmdShutdown"),
     HELP("cmdHelp");
 

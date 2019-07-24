@@ -30,6 +30,7 @@ public class CommandBuilder {
         this.listenersToPrint.add(new RemoveSubRedditCommand());
         this.listenersToPrint.add(new EditSubRedditCommand());
         this.listenersToPrint.add(new ShowWatchListCommand());
+        this.listenersToPrint.add(new WatchCommand());
     }
 
     public void build() {
