@@ -24,8 +24,6 @@ public class Bot implements EventListener {
 
             this.builder.setToken(config.getConfig("botToken"));
             this.builder.setStatus(OnlineStatus.ONLINE);
-//            this.builder.setActivity(Activity.watching("r/Animemes"));
-//            Bot.getShardManager().setActivity(null);
             this.loadCommands();
 
             Bot.setShardManager(this.builder.build());

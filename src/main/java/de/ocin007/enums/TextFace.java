@@ -10,7 +10,8 @@ public enum TextFace {
     SHAME("(_　_|||)"),
     REALLY("(；一ω一||)"),
     SERIOUS("(ー_ー )"),
-    WATCHING("(⊍-⊍)");
+    WATCHING("(⊍-⊍)"),
+    WHAT("(⊙д⊙)");
 
     private String name;
 

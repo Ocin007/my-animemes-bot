@@ -9,6 +9,7 @@ import org.json.simple.parser.JSONParser;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Random;
 
 public class Config {
 
@@ -17,10 +18,12 @@ public class Config {
     private final static String PATH_TO_MSG_PROPERTIES = "src/main/resources/messages.properties";
     private final static String PATH_TO_PREFIX_PROPERTIES = "src/main/resources/prefixes.properties";
     private final static String PATH_TO_CURRENT_SUBREDDITS = "src/main/resources/json/currentlyWatchedSubReddits.json";
+    private final static String PATH_TO_DEFAULT_CMD_GIFS = "src/main/resources/json/defaultCommandGifs.json";
 
     private static Config ourInstance;
     private HashMap<String, Properties> propMap;
-    private JSONObject jsonObj;
+    private JSONObject subRedditObj;
+    private JSONArray gifJsonList;
 
     public static Config getInstance() {
         if(ourInstance == null) {
@@ -32,22 +35,30 @@ public class Config {
     private Config() {
         try {
             this.propMap = new HashMap<>();
-            this.jsonObj = new JSONObject();
+            this.subRedditObj = new JSONObject();
             this.appendProperty(ConfigKeys.TOKEN.toString(), PATH_TO_TOKEN_PROPERTIES);
             this.appendProperty(ConfigKeys.CMD.toString(), PATH_TO_CMD_PROPERTIES);
             this.appendProperty(ConfigKeys.MSG.toString(), PATH_TO_MSG_PROPERTIES);
             this.appendProperty(ConfigKeys.PREFIX.toString(), PATH_TO_PREFIX_PROPERTIES);
-            this.getJson(PATH_TO_CURRENT_SUBREDDITS);
+            this.getSubRedditJson();
+            this.getDefaultCommandGifs();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void getJson(String path) throws Exception {
+    private void getDefaultCommandGifs() throws Exception {
         JSONParser jsonParser = new JSONParser();
-        FileReader reader = new FileReader(path);
+        FileReader reader = new FileReader(Config.PATH_TO_DEFAULT_CMD_GIFS);
         Object obj = jsonParser.parse(reader);
-        this.jsonObj = (JSONObject) obj;
+        this.gifJsonList = (JSONArray) obj;
+    }
+
+    private void getSubRedditJson() throws Exception {
+        JSONParser jsonParser = new JSONParser();
+        FileReader reader = new FileReader(Config.PATH_TO_CURRENT_SUBREDDITS);
+        Object obj = jsonParser.parse(reader);
+        this.subRedditObj = (JSONObject) obj;
     }
 
     private void appendProperty(String key, String path) throws IOException {
@@ -58,8 +69,12 @@ public class Config {
         this.propMap.put(key, prop);
     }
 
+    public String getRandomGif() {
+        return (String) this.gifJsonList.get(new Random().nextInt(this.gifJsonList.size()));
+    }
+
     public JSONObject getSubReddit(String name) {
-        JSONArray list = (JSONArray) this.jsonObj.get("subreddits");
+        JSONArray list = (JSONArray) this.subRedditObj.get("subreddits");
         for (Object obj: list) {
             JSONObject subreddit = (JSONObject) obj;
             if((subreddit.get("subreddit")).equals(name)) {
@@ -70,11 +85,11 @@ public class Config {
     }
 
     public JSONArray getAllSubReddits() {
-        return (JSONArray) this.jsonObj.get("subreddits");
+        return (JSONArray) this.subRedditObj.get("subreddits");
     }
 
     public void setSubReddit(String name, SubRedditType value) {
-        JSONArray list = (JSONArray) this.jsonObj.get("subreddits");
+        JSONArray list = (JSONArray) this.subRedditObj.get("subreddits");
         final Boolean[] inserted = {false};
         list.forEach(obj -> {
             JSONObject subreddit = (JSONObject) obj;
@@ -86,21 +101,21 @@ public class Config {
         if(!inserted[0]) {
             list.add(value.toJSONObject());
         }
-        this.jsonObj.put("subreddits", list);
+        this.subRedditObj.put("subreddits", list);
         this.updateSubRedditListFile();
     }
 
     public void removeSubReddit(String name) {
-        JSONArray list = (JSONArray) this.jsonObj.get("subreddits");
+        JSONArray list = (JSONArray) this.subRedditObj.get("subreddits");
         list.remove(this.getSubReddit(name));
-        this.jsonObj.put("subreddits", list);
+        this.subRedditObj.put("subreddits", list);
         this.updateSubRedditListFile();
     }
 
     private void updateSubRedditListFile() {
         try {
             FileWriter file = new FileWriter(PATH_TO_CURRENT_SUBREDDITS);
-            file.write(this.jsonObj.toJSONString());
+            file.write(this.subRedditObj.toJSONString());
             file.flush();
         } catch (Exception e) {
             e.printStackTrace();

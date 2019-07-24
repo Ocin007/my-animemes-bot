@@ -3,6 +3,7 @@ package de.ocin007.enums;
 import de.ocin007.config.Config;
 
 public enum Msg implements ConfigEnum {
+    CMD_NOT_VALID("msgCmdNotValid"),
     UNAUTHORIZED("msgUnauthorized"),
     SUCCESS("msgSuccess"),
     ERROR("msgError"),

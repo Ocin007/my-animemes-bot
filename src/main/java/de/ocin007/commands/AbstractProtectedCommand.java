@@ -19,6 +19,9 @@ public abstract class AbstractProtectedCommand extends AbstractCommand {
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         String msg = event.getMessage().getContentDisplay();
         String[] literals = msg.split(" ");
+        if(literals.length < 2) {
+            return;
+        }
         if(literals[0].equals(this.cmdPrefix) && literals[1].equals(this.cmdStr)) {
             String[] args = Arrays.copyOfRange(literals, 2, literals.length);
             if(this.isAuthorized(event)) {
