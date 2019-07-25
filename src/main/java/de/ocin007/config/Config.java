@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class Config {
 
-    private final static String PATH_TO_TOKEN_PROPERTIES = "src/main/resources/config.properties";
+    private final static String PATH_TO_CONFIG_PROPERTIES = "src/main/resources/config.properties";
     private final static String PATH_TO_CMD_PROPERTIES = "src/main/resources/commands.properties";
     private final static String PATH_TO_MSG_PROPERTIES = "src/main/resources/messages.properties";
     private final static String PATH_TO_PREFIX_PROPERTIES = "src/main/resources/prefixes.properties";
@@ -36,7 +36,7 @@ public class Config {
         try {
             this.propMap = new HashMap<>();
             this.subRedditObj = new JSONObject();
-            this.appendProperty(ConfigKeys.TOKEN.toString(), PATH_TO_TOKEN_PROPERTIES);
+            this.appendProperty(ConfigKeys.TOKEN.toString(), PATH_TO_CONFIG_PROPERTIES);
             this.appendProperty(ConfigKeys.CMD.toString(), PATH_TO_CMD_PROPERTIES);
             this.appendProperty(ConfigKeys.MSG.toString(), PATH_TO_MSG_PROPERTIES);
             this.appendProperty(ConfigKeys.PREFIX.toString(), PATH_TO_PREFIX_PROPERTIES);
@@ -129,7 +129,7 @@ public class Config {
     public void setConfig(String key, String value) {
         try {
             this.propMap.get(ConfigKeys.TOKEN.toString()).setProperty(key, value);
-            OutputStream output = new FileOutputStream(PATH_TO_TOKEN_PROPERTIES);
+            OutputStream output = new FileOutputStream(PATH_TO_CONFIG_PROPERTIES);
             this.propMap.get(ConfigKeys.TOKEN.toString()).store(output, "");
         } catch (Exception e) {
             e.printStackTrace();
