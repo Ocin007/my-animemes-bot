@@ -2,9 +2,11 @@ package de.ocin007.http.reddit;
 
 
 import de.ocin007.config.Config;
+import de.ocin007.config.types.SubRedditType;
 import de.ocin007.enums.routes.reddit.Route;
 import de.ocin007.http.HttpHandler;
 import org.apache.commons.codec.binary.Base64;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.UUID;
@@ -15,6 +17,10 @@ public class RedditApi {
     private final static String API_OAUTH_BASE_URL = "https://oauth.reddit.com";
     private final static String REDIRECT_URI = "http://localhost";
     private final static Long REFRESH_TIME_SPAN = 3500000L;
+
+    public static String getApiBaseUrl() {
+        return API_BASE_URL;
+    }
 
     public String getAuthorisationUrl() {
         HttpHandler http = new HttpHandler(API_BASE_URL + Route.AUTHORIZE);
@@ -48,6 +54,23 @@ public class RedditApi {
             return kind.equals("t5");
         }
         return false;
+    }
+
+    public JSONArray getPosts(SubRedditType sub, Integer limit) throws Exception {
+        HttpHandler http = new HttpHandler(
+                API_OAUTH_BASE_URL+"/"+sub.getSubreddit()+"/"+sub.getSortBy()
+        );
+        http.addParam("limit", limit.toString());
+        if(sub.getLastPostId() != null) {
+            http.addParam("before", sub.getLastPostId());
+        }
+        this.addBearer(http);
+        JSONObject res = http.get();
+        if(res.get("error") != null || res.get("data") == null) {
+            return null;
+        }
+        JSONObject data = (JSONObject) res.get("data");
+        return (JSONArray) data.get("children");
     }
 
     private JSONObject getAccessToken(String code) {

@@ -1,5 +1,6 @@
 package de.ocin007.commands.reddit;
 
+import de.ocin007.Bot;
 import de.ocin007.commands.AbstractCommand;
 import de.ocin007.config.Config;
 import de.ocin007.config.types.SubRedditType;
@@ -7,6 +8,8 @@ import de.ocin007.enums.Cmd;
 import de.ocin007.enums.Msg;
 import de.ocin007.enums.Prefix;
 import de.ocin007.enums.TextFace;
+import de.ocin007.http.reddit.RedditApi;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -161,7 +164,126 @@ public class WatchCommand extends AbstractCommand {
 
     private Runnable getWatcherFunction(String subName) {
         return () -> {
-            System.out.println(subName);
+            Config config = Config.getInstance();
+            SubRedditType sub = new SubRedditType(config.getSubReddit(subName));
+            TextChannel channel = Bot.getShardManager().getTextChannelById(sub.getTextChannel());
+            try {
+                RedditApi api = new RedditApi();
+                JSONArray posts;
+                try {
+                    if(sub.getLastPostId() == null) {
+                        posts = api.getPosts(sub, 100);
+                    } else {
+                        posts = api.getPosts(sub, 10);
+                    }
+                    if(posts == null) {
+                        channel.sendMessage(
+                                "@here "+Msg.ERROR.literal()+" "+TextFace.TABLE_FLIP
+                        ).queue();
+                        return;
+                    }
+                } catch (Exception e) {
+                    channel.sendMessage(
+                            "@here "+Msg.ERROR.literal()+" "+TextFace.TABLE_FLIP
+                    ).queue();
+                    e.printStackTrace();
+                    return;
+                }
+                int count = 0;
+                for (int i = posts.size() - 1; i >= 0; i--) {
+                    JSONObject o = (JSONObject) posts.get(i);
+                    JSONObject post = (JSONObject) o.get("data");
+                    if(count == 5) {
+                        break;
+                    } else if(!(boolean)post.get("stickied")) {
+                        channel.sendMessage(this.createPostStr(post, sub)).queue();
+                        sub.setLastPostId((String) post.get("name"));
+                        sub.setTimestamp(
+                                new Double(post.get("created_utc").toString()).longValue()
+                        );
+                        count++;
+                    }
+                }
+                config.setSubReddit(subName, sub);
+            } catch (Exception e) {
+                channel.sendMessage(
+                        "@here **"+subName+"**: "+Msg.STOP_WATCHING.literal()+"\n" +
+                                Msg.ERROR.literal()+" "+TextFace.TABLE_FLIP
+                ).queue();
+                e.printStackTrace();
+                this.removeWatcher(sub);
+            }
         };
+    }
+
+    private String createPostStr(JSONObject post, SubRedditType sub) {
+        String type = this.getPostType(post);
+        Long diff = (System.currentTimeMillis()/1000) - new Double(post.get("created_utc").toString()).longValue();
+        String sortBy = this.getSortByEmote(sub.getSortBy());
+        return  type+" **"+post.get("title")+"**  **|**  " +
+                sortBy+" "+sub.getSubreddit()+"/"+sub.getSortBy()+"  **|**  " +
+                ":arrow_up: "+post.get("ups")+"  **|**  " +
+                ":speech_balloon: "+post.get("num_comments")+"\n" +
+                ":clock1: *posted "+this.timestampDiffToStr(diff)+" ago*\n\n" +
+                RedditApi.getApiBaseUrl()+post.get("permalink");
+    }
+
+    private String getSortByEmote(String sortBy) {
+        String emote;
+        switch (sortBy) {
+            case "hot": emote = ":fire:"; break;
+            case "new": emote = ":star2:"; break;
+            case "rising": emote = ":chart_with_upwards_trend:"; break;
+            default: emote = ":question:";
+        }
+        return emote;
+    }
+
+    private String getPostType(JSONObject post) {
+        String type;
+        if(post.get("post_hint") != null) {
+            switch ((String)post.get("post_hint")) {
+                case "image": type = ":camera:"; break;
+                case "hosted:video": type = ":film_frames:"; break;
+                case "self": type = ":page_facing_up:"; break;
+                case "link": type = ":link:"; break;
+                default: type = ":question:";
+            }
+        } else {
+            if((boolean)post.get("is_video")) {
+                type = ":film_frames:";
+            } else if((boolean)post.get("is_self")) {
+                type = ":page_facing_up:";
+            } else {
+                type = ":question:";
+            }
+        }
+        return type;
+    }
+
+    private String timestampDiffToStr(Long diff) {
+        Long days = diff / 86400;
+        if(days > 1) {
+            return days +" days";
+        } else if(days == 1) {
+            return days +" day";
+        }
+        Long hours = diff / 3600;
+        if(hours > 1) {
+            return hours +" hours";
+        } else if(hours == 1) {
+            return hours +" hour";
+        }
+        Long minutes = diff / 60;
+        if(minutes > 1) {
+            return minutes +" minutes";
+        } else if(minutes == 1) {
+            return minutes +" minute";
+        }
+        if(diff > 1) {
+            return diff +" seconds";
+        } else {
+            return "1 second";
+        }
     }
 }

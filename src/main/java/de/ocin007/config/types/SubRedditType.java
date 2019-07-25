@@ -9,17 +9,17 @@ public class SubRedditType {
     public static final String SORT_BY_HOT = "hot";
     public static final String SORT_BY_RISING = "rising";
 
-    private String subreddit;//
-    private String sortBy;//
-    private String lastPrinted;
+    private String subreddit;
+    private String sortBy;
+    private String lastPostId;
     private Long timestamp;
     private Boolean currentlyWatched;
-    private String textChannel;//
+    private String textChannel;
 
     public SubRedditType(
             String subreddit,
             String sortBy,
-            String lastPrinted,
+            String lastPostId,
             Long timestamp,
             Boolean currentlyWatched,
             String textChannel
@@ -27,7 +27,7 @@ public class SubRedditType {
 
         this.subreddit = subreddit;
         this.sortBy = sortBy;
-        this.lastPrinted = lastPrinted;
+        this.lastPostId = lastPostId;
         this.timestamp = timestamp;
         this.currentlyWatched = currentlyWatched;
         this.textChannel = textChannel;
@@ -36,7 +36,7 @@ public class SubRedditType {
     public SubRedditType(JSONObject obj) {
         this.subreddit = (String)obj.get("subreddit");
         this.sortBy = (String)obj.get("sortBy");
-        this.lastPrinted = (String)obj.get("lastPrinted");
+        this.lastPostId = (String)obj.get("lastPostId");
         this.timestamp = (Long)obj.get("timestamp");
         this.currentlyWatched = (Boolean)obj.get("currentlyWatched");
         this.textChannel = (String)obj.get("textChannel");
@@ -58,12 +58,12 @@ public class SubRedditType {
         this.sortBy = sortBy;
     }
 
-    public String getLastPrinted() {
-        return lastPrinted;
+    public String getLastPostId() {
+        return lastPostId;
     }
 
-    public void setLastPrinted(String lastPrinted) {
-        this.lastPrinted = lastPrinted;
+    public void setLastPostId(String lastPostId) {
+        this.lastPostId = lastPostId;
     }
 
     public Long getTimestamp() {
@@ -98,7 +98,7 @@ public class SubRedditType {
         JSONObject obj = new JSONObject();
         obj.put("subreddit", this.subreddit);
         obj.put("sortBy", this.sortBy);
-        obj.put("lastPrinted", this.lastPrinted);
+        obj.put("lastPostId", this.lastPostId);
         obj.put("timestamp", this.timestamp);
         obj.put("currentlyWatched", this.currentlyWatched);
         obj.put("textChannel", this.textChannel);

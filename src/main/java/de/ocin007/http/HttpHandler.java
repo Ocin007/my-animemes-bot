@@ -21,7 +21,6 @@ public class HttpHandler {
     private List<BasicNameValuePair> params;
     private List<BasicNameValuePair> header;
     private String url;
-    private JSONObject lastResponse;
 
     public HttpHandler(String url) {
         this.httpClient = HttpClients.createDefault();
@@ -38,10 +37,6 @@ public class HttpHandler {
         this.header.add(new BasicNameValuePair(key, value));
     }
 
-    public JSONObject getLastResponse() {
-        return this.lastResponse;
-    }
-
     public JSONObject get() {
         try {
             HttpGet httpGet = new HttpGet(this.getQueryURL());
@@ -50,20 +45,19 @@ public class HttpHandler {
             }
             HttpResponse response = this.httpClient.execute(httpGet);
             HttpEntity entity = response.getEntity();
-            this.setResponse(entity);
-            return this.lastResponse;
+            return this.getResponse(entity);
         } catch (Exception e) {
             return this.errorMsg(e);
         }
     }
 
-    private void setResponse(HttpEntity entity) throws IOException {
+    private JSONObject getResponse(HttpEntity entity) throws IOException {
         if (entity != null) {
             InputStream instream = entity.getContent();
             String r = new Scanner( instream ).useDelimiter( "\\Z" ).next();
-            this.lastResponse = (JSONObject) JSONValue.parse(r);
+            return (JSONObject) JSONValue.parse(r);
         } else {
-            this.lastResponse = (JSONObject) JSONValue.parse("{\"error\":\"no response\"}");
+            return (JSONObject) JSONValue.parse("{\"error\":\"no response\"}");
         }
     }
 
@@ -98,17 +92,15 @@ public class HttpHandler {
             }
             HttpResponse response = this.httpClient.execute(httpPost);
             HttpEntity entity = response.getEntity();
-            this.setResponse(entity);
-            return this.lastResponse;
+            return this.getResponse(entity);
         } catch (Exception e) {
             return this.errorMsg(e);
         }
     }
 
     private JSONObject errorMsg(Exception e) {
-        this.lastResponse = (JSONObject) JSONValue.parse(
+        return (JSONObject) JSONValue.parse(
                 "{\"error\":\""+ e.getMessage() +"\",\"stacktrace\":\""+ Arrays.toString(e.getStackTrace()) +"\"}"
         );
-        return this.lastResponse;
     }
 }

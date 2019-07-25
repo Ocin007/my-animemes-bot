@@ -33,7 +33,7 @@ public class EditSubRedditCommand extends AbstractCommand {
                 "**<'hot'|'new'|'rising'|'-'>** sorts subreddit by hot|new|rising\n" +
                 "**<textChannel ID|'-'>** sets a new channel where the reddit stuff gets printed\n" +
                 "**<'" + REMOVE_LAST_ID_FLAG + "'|->** when '" + REMOVE_LAST_ID_FLAG + "' is set, " +
-                "the bot starts by the first post of the current day instead of the last printed one";
+                "the bot starts by the 100th post from now instead of the last printed one";
     }
 
     @Override
@@ -77,7 +77,7 @@ public class EditSubRedditCommand extends AbstractCommand {
             sub.setTextChannel(args[2]);
         }
         if (!args[3].equals("-")) {
-            sub.setLastPrinted(null);
+            sub.setLastPostId(null);
             sub.setTimestamp(null);
         }
         config.setSubReddit(sub.getSubreddit(), sub);
