@@ -1,6 +1,6 @@
 package de.ocin007;
 
-import de.ocin007.commands.CommandBuilder;
+import de.ocin007.builder.CommandBuilder;
 import de.ocin007.config.Config;
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.bot.sharding.ShardManager;

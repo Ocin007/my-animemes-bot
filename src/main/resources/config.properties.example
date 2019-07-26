@@ -1,6 +1,9 @@
 # bot token for discord
 botToken=
 
+# default channel (messaging on ready)
+defaultChannelId=
+
 # reddit api stuff
 clientId=
 clientSecret=

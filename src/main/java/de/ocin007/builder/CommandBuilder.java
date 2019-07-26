@@ -1,7 +1,10 @@
-package de.ocin007.commands;
+package de.ocin007.builder;
 
+import de.ocin007.commands.AbstractCommand;
+import de.ocin007.commands.DefaultCommand;
 import de.ocin007.commands.general.*;
 import de.ocin007.commands.reddit.*;
+import de.ocin007.events.ReadyEventHandler;
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
 
 import java.util.Collection;
@@ -20,10 +23,11 @@ public class CommandBuilder {
         this.appendAllListeners();
         this.listeners.addAll(this.listenersToPrint);
         this.listeners.add(new DefaultCommand());
+        this.listeners.add(new ReadyEventHandler(this.listenersToPrint));
     }
 
     private void appendAllListeners() {
-        this.listenersToPrint.add(new ShutdownCommand());
+        this.listenersToPrint.add(new ShutdownCommand(this.listenersToPrint));
         this.listenersToPrint.add(new HelpCommand(this.listenersToPrint));
         this.listenersToPrint.add(new AuthUrlCommand());
         this.listenersToPrint.add(new AuthorizeCommand());
@@ -32,6 +36,7 @@ public class CommandBuilder {
         this.listenersToPrint.add(new EditSubRedditCommand());
         this.listenersToPrint.add(new ShowWatchListCommand());
         this.listenersToPrint.add(new WatchCommand());
+        this.listenersToPrint.add(new RandomCommand());
     }
 
     public void build() {

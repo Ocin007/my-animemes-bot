@@ -7,7 +7,7 @@ public enum TextFace {
     CRY("༼ つ ಥ_ಥ ༽つ"),
     CONFOUNDED("(ᵕ﹏ᵕ)"),
     TABLE_FLIP("(ノಠ益ಠ)ノ┻━┻"),
-    SHAME("(_　_|||)"),
+    SHAME("(-    -  |||)"),
     REALLY("(；一ω一||)"),
     SERIOUS("(ー_ー )"),
     WATCHING("(⊍-⊍)"),

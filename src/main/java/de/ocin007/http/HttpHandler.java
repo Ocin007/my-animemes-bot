@@ -44,6 +44,7 @@ public class HttpHandler {
                 httpGet.addHeader(pair.getName(), pair.getValue());
             }
             HttpResponse response = this.httpClient.execute(httpGet);
+            System.out.println("GET: "+response);
             HttpEntity entity = response.getEntity();
             return this.getResponse(entity);
         } catch (Exception e) {
@@ -91,6 +92,7 @@ public class HttpHandler {
                 httpPost.addHeader(pair.getName(), pair.getValue());
             }
             HttpResponse response = this.httpClient.execute(httpPost);
+            System.out.println("POST: "+response);
             HttpEntity entity = response.getEntity();
             return this.getResponse(entity);
         } catch (Exception e) {

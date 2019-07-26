@@ -9,6 +9,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.Random;
 import java.util.UUID;
 
 public class RedditApi {
@@ -71,6 +72,24 @@ public class RedditApi {
         }
         JSONObject data = (JSONObject) res.get("data");
         return (JSONArray) data.get("children");
+    }
+
+    public JSONObject getRandomPost() throws Exception {
+        HttpHandler http = new HttpHandler(API_OAUTH_BASE_URL+Route.RANDOM);
+        http.addParam("limit", String.valueOf(100));
+        this.addBearer(http);
+        JSONObject res = http.get();
+        if(res.get("error") != null || res.get("data") == null) {
+            return null;
+        }
+        JSONObject data = (JSONObject) res.get("data");
+        if(data.get("children") == null) {
+            return null;
+        }
+        JSONArray list = (JSONArray) data.get("children");
+        int randInt = new Random().nextInt(list.size());
+        JSONObject child = (JSONObject) list.get(randInt);
+        return (JSONObject) child.get("data");
     }
 
     private JSONObject getAccessToken(String code) {

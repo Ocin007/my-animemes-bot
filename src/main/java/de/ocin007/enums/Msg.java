@@ -19,7 +19,11 @@ public enum Msg implements ConfigEnum {
     ALR_WATCHING_ALL("msgAlrWatchingAll"),
     NOT_WATCHING_ALL("msgNotWatchingAny"),
     INVALID_ARGS("msgInvalidArgs"),
-    SHUTDOWN("msgShutdown");
+    SHUTDOWN("msgShutdown"),
+    HELLO("msgHello"),
+    RESTART_SERVICES("msgServicesStarted"),
+    PAUSED_WATCHING_ALL("msgPausedWatchingAll"),
+    RESTART_WATCHING("msgRestartWatching");
 
     private String name;
     private Config config;

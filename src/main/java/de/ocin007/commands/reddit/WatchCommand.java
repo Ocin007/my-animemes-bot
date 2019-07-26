@@ -1,7 +1,9 @@
 package de.ocin007.commands.reddit;
 
 import de.ocin007.Bot;
+import de.ocin007.builder.reddit.SubRedditPost;
 import de.ocin007.commands.AbstractCommand;
+import de.ocin007.commands.ServiceCommand;
 import de.ocin007.config.Config;
 import de.ocin007.config.types.SubRedditType;
 import de.ocin007.enums.Cmd;
@@ -14,12 +16,13 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class WatchCommand extends AbstractCommand {
+public class WatchCommand extends AbstractCommand implements ServiceCommand {
 
     private Config config;
     private HashMap<String, ScheduledExecutorService> watchMap;
@@ -32,18 +35,23 @@ public class WatchCommand extends AbstractCommand {
 
     @Override
     public String getCmdSignature() {
-        return Prefix.GENERAL.literal()+" "+Cmd.WATCH.literal()+" <'start'|'stop'> <r/rubreddit|'all'>";
+        return Prefix.GENERAL.literal()+" "+Cmd.WATCH.literal()+" <'start'|'stop'> <r/rubreddit|'all'>\n" +
+                Prefix.GENERAL.literal()+" "+Cmd.WATCH.literal()+" <'sync'>";
     }
 
     @Override
     public String getCmdDescription() {
         return "starts/stops watching in subreddit for posts\n" +
                 "**<'start'|'stop'>** starts/stops watching\n" +
-                "**<r/*subreddit*|'all'>** an existing subreddit, has to start with 'r/', or just 'all'";
+                "**<r/*subreddit*|'all'>** an existing subreddit, has to start with 'r/', or just 'all'\n" +
+                "**<'sync'>** stops and restarts every active watcher";
     }
 
     @Override
     protected boolean argsValid(String[] args) {
+        if(args.length == 1 && args[0].equals("sync")) {
+            return true;
+        }
         if(args.length != 2) {
             return false;
         }
@@ -55,6 +63,10 @@ public class WatchCommand extends AbstractCommand {
 
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
+        if(args[0].equals("sync")) {
+            this.syncAllWatchers(event);
+            return;
+        }
         if(args[1].equals("all")) {
             if(args[0].equals("start")) {
                 this.startAllWatchers(event);
@@ -74,6 +86,46 @@ public class WatchCommand extends AbstractCommand {
             this.startWatcher(event, new SubRedditType(subJson));
         } else {
             this.stopWatcher(event, new SubRedditType(subJson));
+        }
+    }
+
+    @Override
+    public void shutdownService(MessageReceivedEvent event) {
+        this.watchMap.forEach((key, watcher) -> watcher.shutdown());
+        event.getTextChannel().sendMessage(Msg.PAUSED_WATCHING_ALL.literal()).queue();
+        this.watchMap = new HashMap<>();
+    }
+
+    @Override
+    public void restartService() {
+        this.syncAllWatchers(null);
+    }
+
+    private void syncAllWatchers(MessageReceivedEvent event) {
+        JSONArray list = this.config.getAllSubReddits();
+        Integer count = 0;
+        for (Object o : list) {
+            SubRedditType sub = new SubRedditType((JSONObject) o);
+            if(sub.getCurrentlyWatched()) {
+                count++;
+                if(this.watchMap.get(sub.getSubreddit()) != null) {
+                    this.removeWatcher(sub);
+                }
+                this.addWatcher(sub);
+            }
+        }
+        if(count == 0) {
+            this.sendMsg(event, Msg.NOT_WATCHING_ALL.literal() + " " + TextFace.SHAME);
+            return;
+        }
+        this.sendMsg(event, "**(+"+count+")** "+Msg.RESTART_WATCHING.literal() + " " + TextFace.WATCHING);
+    }
+
+    private void sendMsg(MessageReceivedEvent event, String msg) {
+        if(event == null) {
+            System.out.println(msg);
+        } else {
+            event.getTextChannel().sendMessage(msg).queue();
         }
     }
 
@@ -171,17 +223,14 @@ public class WatchCommand extends AbstractCommand {
                 RedditApi api = new RedditApi();
                 JSONArray posts;
                 try {
-                    if(sub.getLastPostId() == null) {
-                        posts = api.getPosts(sub, 100);
-                    } else {
-                        posts = api.getPosts(sub, 10);
-                    }
+                    posts = api.getPosts(sub, 100);
                     if(posts == null) {
                         channel.sendMessage(
                                 "@here "+Msg.ERROR.literal()+" "+TextFace.TABLE_FLIP
                         ).queue();
                         return;
                     }
+                    System.out.println("["+new Date()+"] "+subName+": "+posts.size());
                 } catch (Exception e) {
                     channel.sendMessage(
                             "@here "+Msg.ERROR.literal()+" "+TextFace.TABLE_FLIP
@@ -196,7 +245,7 @@ public class WatchCommand extends AbstractCommand {
                     if(count == 5) {
                         break;
                     } else if(!(boolean)post.get("stickied")) {
-                        channel.sendMessage(this.createPostStr(post, sub)).queue();
+                        channel.sendMessage(new SubRedditPost(post, sub).toString()).queue();
                         sub.setLastPostId((String) post.get("name"));
                         sub.setTimestamp(
                                 new Double(post.get("created_utc").toString()).longValue()
@@ -214,76 +263,5 @@ public class WatchCommand extends AbstractCommand {
                 this.removeWatcher(sub);
             }
         };
-    }
-
-    private String createPostStr(JSONObject post, SubRedditType sub) {
-        String type = this.getPostType(post);
-        Long diff = (System.currentTimeMillis()/1000) - new Double(post.get("created_utc").toString()).longValue();
-        String sortBy = this.getSortByEmote(sub.getSortBy());
-        return  type+" **"+post.get("title")+"**  **|**  " +
-                sortBy+" "+sub.getSubreddit()+"/"+sub.getSortBy()+"  **|**  " +
-                ":arrow_up: "+post.get("ups")+"  **|**  " +
-                ":speech_balloon: "+post.get("num_comments")+"\n" +
-                ":clock1: *posted "+this.timestampDiffToStr(diff)+" ago*\n\n" +
-                RedditApi.getApiBaseUrl()+post.get("permalink");
-    }
-
-    private String getSortByEmote(String sortBy) {
-        String emote;
-        switch (sortBy) {
-            case "hot": emote = ":fire:"; break;
-            case "new": emote = ":star2:"; break;
-            case "rising": emote = ":chart_with_upwards_trend:"; break;
-            default: emote = ":question:";
-        }
-        return emote;
-    }
-
-    private String getPostType(JSONObject post) {
-        String type;
-        if(post.get("post_hint") != null) {
-            switch ((String)post.get("post_hint")) {
-                case "image": type = ":camera:"; break;
-                case "hosted:video": type = ":film_frames:"; break;
-                case "self": type = ":page_facing_up:"; break;
-                case "link": type = ":link:"; break;
-                default: type = ":question:";
-            }
-        } else {
-            if((boolean)post.get("is_video")) {
-                type = ":film_frames:";
-            } else if((boolean)post.get("is_self")) {
-                type = ":page_facing_up:";
-            } else {
-                type = ":question:";
-            }
-        }
-        return type;
-    }
-
-    private String timestampDiffToStr(Long diff) {
-        Long days = diff / 86400;
-        if(days > 1) {
-            return days +" days";
-        } else if(days == 1) {
-            return days +" day";
-        }
-        Long hours = diff / 3600;
-        if(hours > 1) {
-            return hours +" hours";
-        } else if(hours == 1) {
-            return hours +" hour";
-        }
-        Long minutes = diff / 60;
-        if(minutes > 1) {
-            return minutes +" minutes";
-        } else if(minutes == 1) {
-            return minutes +" minute";
-        }
-        if(diff > 1) {
-            return diff +" seconds";
-        } else {
-            return "1 second";
-        }
     }
 }
