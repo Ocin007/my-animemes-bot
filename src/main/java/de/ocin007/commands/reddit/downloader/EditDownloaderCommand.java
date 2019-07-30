@@ -1,6 +1,5 @@
-package de.ocin007.commands.reddit;
+package de.ocin007.commands.reddit.downloader;
 
-import de.ocin007.Bot;
 import de.ocin007.commands.AbstractCommand;
 import de.ocin007.config.Config;
 import de.ocin007.config.types.SubRedditType;
@@ -8,22 +7,21 @@ import de.ocin007.enums.Cmd;
 import de.ocin007.enums.Msg;
 import de.ocin007.enums.Prefix;
 import de.ocin007.enums.TextFace;
-import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.simple.JSONObject;
 
-public class EditSubRedditCommand extends AbstractCommand {
+public class EditDownloaderCommand extends AbstractCommand {
 
     private static final String REMOVE_LAST_ID_FLAG = "rmID";
 
-    public EditSubRedditCommand() {
-        super(Prefix.GENERAL, Cmd.EDIT_SUBREDDIT);
+    public EditDownloaderCommand() {
+        super(Prefix.DOWNLOADER, Cmd.EDIT_SUBREDDIT);
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.GENERAL.literal() + " " + Cmd.EDIT_SUBREDDIT.literal() + " " +
-                "<r/subreddit> <'hot'|'new'|'rising'|'-'> <textChannel ID|'-'> <'" + REMOVE_LAST_ID_FLAG + "'|'-'>";
+        return Prefix.DOWNLOADER.literal() + " " + Cmd.EDIT_SUBREDDIT.literal() + " " +
+                "<r/subreddit> <'hot'|'new'|'rising'|'-'> <'" + REMOVE_LAST_ID_FLAG + "'|'-'>";
     }
 
     @Override
@@ -31,14 +29,13 @@ public class EditSubRedditCommand extends AbstractCommand {
         return "edits an existing subreddit. use '-' if you dont want to change a parameter\n" +
                 "**<r/*subreddit*>** an existing subreddit, has to start with 'r/'\n" +
                 "**<'hot'|'new'|'rising'|'-'>** sorts subreddit by hot|new|rising\n" +
-                "**<textChannel ID|'-'>** sets a new channel where the reddit stuff gets printed\n" +
                 "**<'" + REMOVE_LAST_ID_FLAG + "'|->** when '" + REMOVE_LAST_ID_FLAG + "' is set, " +
                 "the bot starts by the 100th post from now instead of the last printed one";
     }
 
     @Override
     protected boolean argsValid(String[] args) {
-        if (args.length != 4) {
+        if (args.length != 3) {
             return false;
         }
         if (!args[0].startsWith("r/")) {
@@ -50,19 +47,13 @@ public class EditSubRedditCommand extends AbstractCommand {
                 !args[1].equals("-")) {
             return false;
         }
-        if (!args[2].equals("-")) {
-            TextChannel channel = Bot.getShardManager().getTextChannelById(args[2]);
-            if (channel == null) {
-                return false;
-            }
-        }
-        return args[3].equals(REMOVE_LAST_ID_FLAG) || args[3].equals("-");
+        return args[2].equals(REMOVE_LAST_ID_FLAG) || args[2].equals("-");
     }
 
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
         Config config = Config.getInstance();
-        JSONObject subJson = config.getWatcher(args[0]);
+        JSONObject subJson = config.getDownloader(args[0]);
         if (subJson == null) {
             event.getTextChannel().sendMessage(
                     Msg.SUB_NOT_EXIST.literal() + " " + TextFace.IDK
@@ -74,13 +65,10 @@ public class EditSubRedditCommand extends AbstractCommand {
             sub.setSortBy(args[1]);
         }
         if (!args[2].equals("-")) {
-            sub.setTextChannel(args[2]);
-        }
-        if (!args[3].equals("-")) {
             sub.setLastPostId(null);
             sub.setTimestamp(null);
         }
-        config.setWatcher(sub.getSubreddit(), sub);
+        config.setDownloader(sub.getSubreddit(), sub);
         event.getTextChannel().sendMessage(
                 Msg.SUCCESS.literal() + " " + TextFace.HAPPY
         ).queue();
