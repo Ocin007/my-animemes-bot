@@ -1,4 +1,4 @@
-package de.ocin007.commands.reddit;
+package de.ocin007.commands.reddit.watcher;
 
 import de.ocin007.commands.AbstractCommand;
 import de.ocin007.config.Config;
@@ -14,12 +14,12 @@ import org.json.simple.JSONObject;
 public class ShowWatchListCommand extends AbstractCommand {
 
     public ShowWatchListCommand() {
-        super(Prefix.GENERAL, Cmd.SHOW);
+        super(Prefix.WATCHER, Cmd.SHOW);
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.GENERAL.literal()+" "+Cmd.SHOW.literal()+" <r/subreddit|'all'>";
+        return Prefix.WATCHER.literal()+" "+Cmd.SHOW.literal()+" <r/subreddit|'all'>";
     }
 
     @Override

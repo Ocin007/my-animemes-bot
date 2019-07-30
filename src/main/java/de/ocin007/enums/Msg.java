@@ -10,6 +10,7 @@ public enum Msg implements ConfigEnum {
     SUB_ALR_EXIST("msgSubAlreadyExist"),
     SUB_NOT_EXIST("msgSubNotExist"),
     WATCHLIST_EMPTY("msgWatchListEmpty"),
+    DOWNLOADLIST_EMPTY("msgDownloadListEmpty"),
     ALR_WATCHING("msgAlrWatching"),
     NOT_WATCHING("msgNotWatching"),
     START_WATCHING_ALL("msgStartWatchingAll"),
