@@ -4,14 +4,8 @@ import de.ocin007.commands.AbstractCommand;
 import de.ocin007.commands.DefaultCommand;
 import de.ocin007.commands.general.*;
 import de.ocin007.commands.reddit.*;
-import de.ocin007.commands.reddit.downloader.AddDownloaderCommand;
-import de.ocin007.commands.reddit.downloader.EditDownloaderCommand;
-import de.ocin007.commands.reddit.downloader.RemoveDownloaderCommand;
-import de.ocin007.commands.reddit.downloader.ShowDownloaderListCommand;
-import de.ocin007.commands.reddit.watcher.AddWatcherCommand;
-import de.ocin007.commands.reddit.watcher.EditWatcherCommand;
-import de.ocin007.commands.reddit.watcher.RemoveWatcherCommand;
-import de.ocin007.commands.reddit.watcher.ShowWatchListCommand;
+import de.ocin007.commands.reddit.downloader.*;
+import de.ocin007.commands.reddit.watcher.*;
 import de.ocin007.events.ReadyEventHandler;
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
 
@@ -48,6 +42,7 @@ public class CommandBuilder {
         this.listenersToPrint.add(new ShowWatchListCommand());
         this.listenersToPrint.add(new ShowDownloaderListCommand());
         this.listenersToPrint.add(new WatchCommand());
+        this.listenersToPrint.add(new DownloadCommand());
         this.listenersToPrint.add(new RandomCommand());
     }
 

@@ -1,4 +1,4 @@
-package de.ocin007.commands.reddit;
+package de.ocin007.commands.reddit.watcher;
 
 import de.ocin007.Bot;
 import de.ocin007.builder.reddit.SubRedditPost;
@@ -28,15 +28,15 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
     private HashMap<String, ScheduledExecutorService> watchMap;
 
     public WatchCommand() {
-        super(Prefix.GENERAL, Cmd.WATCH);
+        super(Prefix.WATCHER, Cmd.WATCH);
         this.watchMap = new HashMap<>();
         this.config = Config.getInstance();
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.GENERAL.literal()+" "+Cmd.WATCH.literal()+" <'start'|'stop'> <r/rubreddit|'all'>\n" +
-                Prefix.GENERAL.literal()+" "+Cmd.WATCH.literal()+" <'sync'>";
+        return Prefix.WATCHER.literal()+" "+Cmd.WATCH.literal()+" <'start'|'stop'> <r/rubreddit|'all'>\n" +
+                Prefix.WATCHER.literal()+" "+Cmd.WATCH.literal()+" <'sync'>";
     }
 
     @Override
@@ -206,6 +206,7 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
         );
         this.watchMap.put(sub.getSubreddit(), exService);
     }
+
     private void addWatcher(SubRedditType sub) {
         this.addWatcher(sub, 0);
     }
@@ -233,7 +234,7 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
                         ).queue();
                         return;
                     }
-                    System.out.println("["+new Date()+"] "+subName+": "+posts.size());
+                    System.out.println("Watch    ["+new Date()+"] "+subName+": "+posts.size());
                 } catch (Exception e) {
                     channel.sendMessage(
                             "@here "+Msg.ERROR.literal()+" "+TextFace.TABLE_FLIP
@@ -262,6 +263,7 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
                         "@here **"+subName+"**: "+Msg.STOP_WATCHING.literal()+"\n" +
                                 Msg.ERROR.literal()+" "+TextFace.TABLE_FLIP
                 ).queue();
+                System.out.println(subName+": Watcher stopped");
                 e.printStackTrace();
                 this.removeWatcher(sub);
             }
