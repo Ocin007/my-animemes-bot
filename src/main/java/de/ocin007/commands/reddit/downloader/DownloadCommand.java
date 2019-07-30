@@ -262,18 +262,20 @@ public class DownloadCommand extends AbstractCommand implements ServiceCommand {
 
     private void downloadImage(String url, String subName, String postId) {
         try {
+            String[] urlPieces = url.split("[.]");
+            String imgType = urlPieces[urlPieces.length-1];
             String dir = System.getProperty("user.dir")+"\\"+PATH_TO_DOWNLOAD_FOLDER+"\\"+subName.substring(2);
             boolean success = new File(dir).mkdirs();
             if(success) {
                 System.out.println("created new dir for "+subName);
             }
-            File file = new File(dir+"\\"+postId+".jpg");
+            File file = new File(dir+"\\"+postId+"."+imgType);
             if(!file.createNewFile()) {
                 return;
             }
             URL urlObj = new URL(url);
             BufferedImage image = ImageIO.read(urlObj);
-            ImageIO.write(image, "jpg",file);
+            ImageIO.write(image, imgType,file);
         } catch(IOException e) {
             System.out.println(subName+": "+url);
             e.printStackTrace();
