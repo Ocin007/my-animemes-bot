@@ -23,7 +23,7 @@ public class EditSubRedditCommand extends AbstractCommand {
     @Override
     public String getCmdSignature() {
         return Prefix.GENERAL.literal() + " " + Cmd.EDIT_SUBREDDIT.literal() + " " +
-                "<r/subreddit> <'hot'|'new'|'rising'|'-'> <textChannel ID|'-'> <'" + REMOVE_LAST_ID_FLAG + "'|->";
+                "<r/subreddit> <'hot'|'new'|'rising'|'-'> <textChannel ID|'-'> <'" + REMOVE_LAST_ID_FLAG + "'|'-'>";
     }
 
     @Override

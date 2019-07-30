@@ -14,7 +14,7 @@ public class CommandBuilder {
 
     private DefaultShardManagerBuilder builder;
     private Collection<Object> listeners;
-    private Collection<AbstractCommand> listenersToPrint;
+    private LinkedList<AbstractCommand> listenersToPrint;
 
     public CommandBuilder(DefaultShardManagerBuilder builder) {
         this.builder = builder;

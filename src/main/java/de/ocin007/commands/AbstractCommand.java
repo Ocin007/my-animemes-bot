@@ -20,6 +20,14 @@ public abstract class AbstractCommand extends ListenerAdapter {
         this.cmdStr = cmdStr.literal();
     }
 
+    public final String getCmdPrefix() {
+        return cmdPrefix;
+    }
+
+    public final String getCmdStr() {
+        return cmdStr;
+    }
+
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         String msg = event.getMessage().getContentDisplay();
