@@ -107,11 +107,11 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
         for (Object o : list) {
             SubRedditType sub = new SubRedditType((JSONObject) o);
             if(sub.getCurrentlyWatched()) {
-                count++;
                 if(this.watchMap.get(sub.getSubreddit()) != null) {
                     this.removeWatcher(sub);
                 }
-                this.addWatcher(sub);
+                this.addWatcher(sub, count);
+                count++;
             }
         }
         if(count == 0) {
@@ -161,8 +161,8 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
         for (Object o : list) {
             SubRedditType sub = new SubRedditType((JSONObject) o);
             if(!sub.getCurrentlyWatched()) {
+                this.addWatcher(sub, count);
                 count++;
-                this.addWatcher(sub);
             }
         }
         if(count == 0) {
@@ -197,14 +197,17 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
         ).queue();
     }
 
-    private void addWatcher(SubRedditType sub) {
+    private void addWatcher(SubRedditType sub, Integer initDelay) {
         sub.setCurrentlyWatched(true);
         this.config.setSubReddit(sub.getSubreddit(), sub);
         ScheduledExecutorService exService = Executors.newSingleThreadScheduledExecutor();
         exService.scheduleAtFixedRate(
-                this.getWatcherFunction(sub.getSubreddit()), 0, 10, TimeUnit.MINUTES
+                this.getWatcherFunction(sub.getSubreddit()), initDelay, 15, TimeUnit.MINUTES
         );
         this.watchMap.put(sub.getSubreddit(), exService);
+    }
+    private void addWatcher(SubRedditType sub) {
+        this.addWatcher(sub, 0);
     }
 
     private void removeWatcher(SubRedditType sub) {
