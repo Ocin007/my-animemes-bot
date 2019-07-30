@@ -9,7 +9,6 @@ import java.util.Collection;
 
 public class HelpCommand extends AbstractCommand {
 
-    private String msg;
     private Collection<AbstractCommand> cmdList;
 
     public HelpCommand(Collection<AbstractCommand> cmdList) {
@@ -34,11 +33,13 @@ public class HelpCommand extends AbstractCommand {
 
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
-        this.msg = "All available commands:\n\n";
-        this.cmdList.forEach(cmd -> this.msg += "```"+
-                cmd.getCmdSignature()+"```" +
-                cmd.getCmdDescription()+"\n\n"
+        event.getTextChannel().sendMessage("All available commands ("+this.cmdList.size()+"):\n\n").queue(
+                (str) -> this.cmdList.forEach(cmd -> {
+                    String msg = "```" +
+                            cmd.getCmdSignature() + "```" +
+                            cmd.getCmdDescription() + "\n\n";
+                    event.getTextChannel().sendMessage(msg).queue();
+                })
         );
-        event.getTextChannel().sendMessage(this.msg).queue();
     }
 }
