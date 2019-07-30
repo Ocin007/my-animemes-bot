@@ -62,7 +62,7 @@ public class EditSubRedditCommand extends AbstractCommand {
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
         Config config = Config.getInstance();
-        JSONObject subJson = config.getSubReddit(args[0]);
+        JSONObject subJson = config.getWatcher(args[0]);
         if (subJson == null) {
             event.getTextChannel().sendMessage(
                     Msg.SUB_NOT_EXIST.literal() + " " + TextFace.IDK
@@ -80,7 +80,7 @@ public class EditSubRedditCommand extends AbstractCommand {
             sub.setLastPostId(null);
             sub.setTimestamp(null);
         }
-        config.setSubReddit(sub.getSubreddit(), sub);
+        config.setWatcher(sub.getSubreddit(), sub);
         event.getTextChannel().sendMessage(
                 Msg.SUCCESS.literal() + " " + TextFace.HAPPY
         ).queue();

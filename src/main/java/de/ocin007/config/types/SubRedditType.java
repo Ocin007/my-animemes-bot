@@ -1,6 +1,7 @@
 package de.ocin007.config.types;
 
 import de.ocin007.Bot;
+import de.ocin007.http.reddit.RedditApi;
 import org.json.simple.JSONObject;
 
 public class SubRedditType {
@@ -40,6 +41,20 @@ public class SubRedditType {
         this.timestamp = (Long)obj.get("timestamp");
         this.currentlyWatched = (Boolean)obj.get("currentlyWatched");
         this.textChannel = (String)obj.get("textChannel");
+    }
+
+    public static boolean nameIsValid(String name) {
+        if(!name.startsWith("r/")) {
+            return false;
+        } else {
+            RedditApi api = new RedditApi();
+            try {
+                return api.subredditExists(name);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
     }
 
     public String getSubreddit() {

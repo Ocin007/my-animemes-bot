@@ -1,4 +1,4 @@
-package de.ocin007.commands.reddit;
+package de.ocin007.commands.reddit.watcher;
 
 import de.ocin007.Bot;
 import de.ocin007.commands.AbstractCommand;
@@ -8,21 +8,20 @@ import de.ocin007.enums.Cmd;
 import de.ocin007.enums.Msg;
 import de.ocin007.enums.Prefix;
 import de.ocin007.enums.TextFace;
-import de.ocin007.http.reddit.RedditApi;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.simple.JSONObject;
 
 
-public class AddSubRedditCommand extends AbstractCommand {
+public class AddWatcherCommand extends AbstractCommand {
 
-    public AddSubRedditCommand() {
-        super(Prefix.GENERAL, Cmd.ADD_SUBREDDIT);
+    public AddWatcherCommand() {
+        super(Prefix.WATCHER, Cmd.ADD_SUBREDDIT);
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.GENERAL.literal()+" "+Cmd.ADD_SUBREDDIT.literal()+" <r/subreddit> <'hot'|'new'|'rising'> [textChannel ID]";
+        return Prefix.WATCHER.literal()+" "+Cmd.ADD_SUBREDDIT.literal()+" <r/subreddit> <'hot'|'new'|'rising'> [textChannel ID]";
     }
 
     @Override
@@ -39,18 +38,8 @@ public class AddSubRedditCommand extends AbstractCommand {
         if(args.length != 3 && args.length != 2) {
             return false;
         }
-        if(!args[0].startsWith("r/")) {
+        if(!SubRedditType.nameIsValid(args[0])) {
             return false;
-        } else {
-            RedditApi api = new RedditApi();
-            try {
-                if(!api.subredditExists(args[0])) {
-                    return false;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
         }
         if(!args[1].equals(SubRedditType.SORT_BY_HOT) &&
                 !args[1].equals(SubRedditType.SORT_BY_NEW) &&
@@ -81,9 +70,9 @@ public class AddSubRedditCommand extends AbstractCommand {
                 channel
         );
         Config config = Config.getInstance();
-        JSONObject existingSub = config.getSubReddit(sub.getSubreddit());
+        JSONObject existingSub = config.getWatcher(sub.getSubreddit());
         if(existingSub == null) {
-            config.setSubReddit(sub.getSubreddit(), sub);
+            config.setWatcher(sub.getSubreddit(), sub);
             event.getTextChannel().sendMessage(
                     Msg.SUCCESS.literal()+" "+TextFace.HAPPY
             ).queue();

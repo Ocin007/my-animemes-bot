@@ -41,7 +41,7 @@ public class ShowWatchListCommand extends AbstractCommand {
         Config config = Config.getInstance();
         if(args[0].equals("all")) {
             StringBuilder msg = new StringBuilder();
-            JSONArray list = config.getAllSubReddits();
+            JSONArray list = config.getAllWatchers();
             if(list.isEmpty()) {
                 event.getTextChannel().sendMessage(
                         Msg.WATCHLIST_EMPTY.literal() + " " + TextFace.CONFOUNDED
@@ -55,7 +55,7 @@ public class ShowWatchListCommand extends AbstractCommand {
             event.getTextChannel().sendMessage(msg.toString()).queue();
             return;
         }
-        JSONObject subJson = config.getSubReddit(args[0]);
+        JSONObject subJson = config.getWatcher(args[0]);
         if (subJson == null) {
             event.getTextChannel().sendMessage(
                     Msg.SUB_NOT_EXIST.literal() + " " + TextFace.IDK

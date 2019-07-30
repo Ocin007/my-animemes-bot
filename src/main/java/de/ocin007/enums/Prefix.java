@@ -3,6 +3,8 @@ package de.ocin007.enums;
 import de.ocin007.config.Config;
 
 public enum Prefix implements ConfigEnum {
+    WATCHER("cmdWatcherPrefix"),
+    DOWNLOADER("cmdDownloaderPrefix"),
     OWNER("cmdOwnerPrefix"),
     GENERAL("cmdGeneralPrefix");
 

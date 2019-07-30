@@ -75,7 +75,7 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
             }
             return;
         }
-        JSONObject subJson = this.config.getSubReddit(args[1]);
+        JSONObject subJson = this.config.getWatcher(args[1]);
         if (subJson == null) {
             event.getTextChannel().sendMessage(
                     Msg.SUB_NOT_EXIST.literal() + " " + TextFace.IDK
@@ -102,7 +102,7 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
     }
 
     private void syncAllWatchers(MessageReceivedEvent event) {
-        JSONArray list = this.config.getAllSubReddits();
+        JSONArray list = this.config.getAllWatchers();
         Integer count = 0;
         for (Object o : list) {
             SubRedditType sub = new SubRedditType((JSONObject) o);
@@ -156,7 +156,7 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
     }
 
     private void startAllWatchers(MessageReceivedEvent event) {
-        JSONArray list = this.config.getAllSubReddits();
+        JSONArray list = this.config.getAllWatchers();
         Integer count = 0;
         for (Object o : list) {
             SubRedditType sub = new SubRedditType((JSONObject) o);
@@ -177,7 +177,7 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
     }
 
     private void stopAllWatchers(MessageReceivedEvent event) {
-        JSONArray list = this.config.getAllSubReddits();
+        JSONArray list = this.config.getAllWatchers();
         Integer count = 0;
         for (Object o : list) {
             SubRedditType sub = new SubRedditType((JSONObject) o);
@@ -199,7 +199,7 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
 
     private void addWatcher(SubRedditType sub, Integer initDelay) {
         sub.setCurrentlyWatched(true);
-        this.config.setSubReddit(sub.getSubreddit(), sub);
+        this.config.setWatcher(sub.getSubreddit(), sub);
         ScheduledExecutorService exService = Executors.newSingleThreadScheduledExecutor();
         exService.scheduleAtFixedRate(
                 this.getWatcherFunction(sub.getSubreddit()), initDelay, 15, TimeUnit.MINUTES
@@ -214,13 +214,13 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
         this.watchMap.get(sub.getSubreddit()).shutdown();
         this.watchMap.remove(sub.getSubreddit());
         sub.setCurrentlyWatched(false);
-        this.config.setSubReddit(sub.getSubreddit(), sub);
+        this.config.setWatcher(sub.getSubreddit(), sub);
     }
 
     private Runnable getWatcherFunction(String subName) {
         return () -> {
             Config config = Config.getInstance();
-            SubRedditType sub = new SubRedditType(config.getSubReddit(subName));
+            SubRedditType sub = new SubRedditType(config.getWatcher(subName));
             TextChannel channel = Bot.getShardManager().getTextChannelById(sub.getTextChannel());
             try {
                 RedditApi api = new RedditApi();
@@ -256,7 +256,7 @@ public class WatchCommand extends AbstractCommand implements ServiceCommand {
                         count++;
                     }
                 }
-                config.setSubReddit(subName, sub);
+                config.setWatcher(subName, sub);
             } catch (Exception e) {
                 channel.sendMessage(
                         "@here **"+subName+"**: "+Msg.STOP_WATCHING.literal()+"\n" +

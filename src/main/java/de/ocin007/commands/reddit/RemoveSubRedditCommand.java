@@ -36,12 +36,12 @@ public class RemoveSubRedditCommand extends AbstractCommand {
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
         Config config = Config.getInstance();
-        if(config.getSubReddit(args[0]) == null) {
+        if(config.getWatcher(args[0]) == null) {
             event.getTextChannel().sendMessage(
                     Msg.SUB_NOT_EXIST.literal()+" "+TextFace.IDK
             ).queue();
         } else {
-            config.removeSubReddit(args[0]);
+            config.removeWatcher(args[0]);
             event.getTextChannel().sendMessage(
                     Msg.SUCCESS.literal()+" "+TextFace.HAPPY
             ).queue();

@@ -33,3 +33,7 @@ my-animemes-bot.iml
 
 # whatchlist
 /src/main/resources/json/currentlyWatchedSubReddits.json
+
+# downloads
+/src/main/resources/json/memeDownloader.json
+/src/main/resources/downloads
