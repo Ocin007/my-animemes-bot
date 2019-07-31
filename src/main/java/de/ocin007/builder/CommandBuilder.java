@@ -24,7 +24,7 @@ public class CommandBuilder {
         this.listenersToPrint = new LinkedList<>();
         this.appendAllListeners();
         this.listeners.addAll(this.listenersToPrint);
-        this.listeners.add(new DefaultCommand());
+        this.listeners.add(new DefaultCommand(this.listenersToPrint));
         this.listeners.add(new ReadyEventHandler(this.listenersToPrint));
     }
 

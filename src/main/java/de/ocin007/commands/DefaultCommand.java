@@ -1,7 +1,6 @@
 package de.ocin007.commands;
 
 import de.ocin007.config.Config;
-import de.ocin007.enums.Cmd;
 import de.ocin007.enums.Msg;
 import de.ocin007.enums.Prefix;
 import de.ocin007.enums.TextFace;
@@ -9,8 +8,16 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.LinkedList;
+
 
 public class DefaultCommand extends ListenerAdapter {
+
+    private LinkedList<AbstractCommand> cmdList;
+
+    public DefaultCommand(LinkedList<AbstractCommand> cmdList) {
+        this.cmdList = cmdList;
+    }
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
@@ -23,8 +30,9 @@ public class DefaultCommand extends ListenerAdapter {
             return;
         }
         if(literals.length > 1) {
-            for (Cmd cmd : Cmd.values()) {
-                if(literals[1].equals(cmd.literal())) {
+            for (AbstractCommand cmd : this.cmdList) {
+                if(literals[0].equals(cmd.getCmdPrefix()) &&
+                        literals[1].equals(cmd.getCmdStr())) {
                     return;
                 }
             }
