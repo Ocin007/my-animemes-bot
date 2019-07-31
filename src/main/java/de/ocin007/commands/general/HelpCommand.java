@@ -10,7 +10,7 @@ import java.util.LinkedList;
 public class HelpCommand extends AbstractCommand {
 
     private LinkedList<AbstractCommand> cmdList;
-    private String msg;
+    private StringBuilder msg;
 
     public HelpCommand(LinkedList<AbstractCommand> cmdList) {
         super(Prefix.GENERAL, Cmd.HELP);
@@ -66,10 +66,19 @@ public class HelpCommand extends AbstractCommand {
     }
 
     private void printCmd(MessageReceivedEvent event) {
-        this.msg = "```All available commands ("+this.cmdList.size()+"):\n\n" +
-                "prefix command <args...|'const values'...> [optional args]\n\n";
-        this.cmdList.forEach(cmd -> this.msg += cmd.getCmdSignature()+"\n");
-        this.msg += "```";
-        event.getTextChannel().sendMessage(this.msg).queue();
+        this.msg = new StringBuilder(
+                "**All available commands :**\n\n" +
+                "prefix command <args...|'const values'...> [optional args]\n\n"
+        );
+        for (Prefix prefix : Prefix.values()) {
+            this.msg.append(prefix.literal()).append("\n```");
+            this.cmdList.forEach(cmd -> {
+                if(prefix.literal().equals(cmd.getCmdPrefix())) {
+                    this.msg.append(cmd.getCmdSignature()).append("\n");
+                }
+            });
+            this.msg.append("```\n");
+        }
+        event.getTextChannel().sendMessage(this.msg.toString()).queue();
     }
 }
