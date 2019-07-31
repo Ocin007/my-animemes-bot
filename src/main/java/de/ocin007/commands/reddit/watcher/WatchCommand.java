@@ -2,7 +2,7 @@ package de.ocin007.commands.reddit.watcher;
 
 import de.ocin007.Bot;
 import de.ocin007.builder.reddit.SubRedditPost;
-import de.ocin007.commands.AbstractCommand;
+import de.ocin007.commands.AbstractVipCommand;
 import de.ocin007.commands.ServiceCommand;
 import de.ocin007.config.Config;
 import de.ocin007.config.types.SubRedditType;
@@ -22,21 +22,21 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class WatchCommand extends AbstractCommand implements ServiceCommand {
+public class WatchCommand extends AbstractVipCommand implements ServiceCommand {
 
     private Config config;
     private HashMap<String, ScheduledExecutorService> watchMap;
 
     public WatchCommand() {
-        super(Prefix.WATCHER, Cmd.WATCH);
+        super(Prefix.VIP, Cmd.WATCH_WATCHER);
         this.watchMap = new HashMap<>();
         this.config = Config.getInstance();
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.WATCHER.literal()+" "+Cmd.WATCH.literal()+" <'start'|'stop'> <r/rubreddit|'all'>\n" +
-                Prefix.WATCHER.literal()+" "+Cmd.WATCH.literal()+" <'sync'>";
+        return Prefix.VIP.literal()+" "+Cmd.WATCH_WATCHER.literal()+" <'start'|'stop'> <r/rubreddit|'all'>\n" +
+                Prefix.VIP.literal()+" "+Cmd.WATCH_WATCHER.literal()+" <'sync'>";
     }
 
     @Override

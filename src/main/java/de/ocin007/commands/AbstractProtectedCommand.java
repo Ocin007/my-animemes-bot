@@ -1,9 +1,13 @@
 package de.ocin007.commands;
 
+import de.ocin007.Bot;
 import de.ocin007.enums.Cmd;
 import de.ocin007.enums.Msg;
 import de.ocin007.enums.Prefix;
 import de.ocin007.enums.TextFace;
+import net.dv8tion.jda.bot.entities.ApplicationInfo;
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +36,21 @@ public abstract class AbstractProtectedCommand extends AbstractCommand {
                 ).queue();
             }
         }
+    }
+
+    boolean isBotOwner(MessageReceivedEvent event) {
+        ApplicationInfo info = Bot.getShardManager().getApplicationInfo().complete();
+        return info.getOwner().equals(event.getAuthor());
+    }
+
+    boolean isGuildAdmin(MessageReceivedEvent event) {
+        Member member = event.getGuild().getMember(event.getAuthor());
+        for (Permission permission : member.getPermissions()) {
+            if (permission.compareTo(Permission.ADMINISTRATOR) == 0 && permission.isGuild()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected abstract boolean isAuthorized(MessageReceivedEvent event);

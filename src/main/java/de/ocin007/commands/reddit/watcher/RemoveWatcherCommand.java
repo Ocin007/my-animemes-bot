@@ -1,6 +1,6 @@
 package de.ocin007.commands.reddit.watcher;
 
-import de.ocin007.commands.AbstractCommand;
+import de.ocin007.commands.AbstractAdminCommand;
 import de.ocin007.config.Config;
 import de.ocin007.enums.Cmd;
 import de.ocin007.enums.Msg;
@@ -8,15 +8,15 @@ import de.ocin007.enums.Prefix;
 import de.ocin007.enums.TextFace;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-public class RemoveWatcherCommand extends AbstractCommand {
+public class RemoveWatcherCommand extends AbstractAdminCommand {
 
     public RemoveWatcherCommand() {
-        super(Prefix.WATCHER, Cmd.REMOVE_SUBREDDIT);
+        super(Prefix.ADMIN, Cmd.REMOVE_WATCHER);
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.WATCHER.literal()+" "+Cmd.REMOVE_SUBREDDIT.literal()+" <r/subreddit>";
+        return Prefix.ADMIN.literal()+" "+Cmd.REMOVE_WATCHER.literal()+" <r/subreddit>";
     }
 
     @Override

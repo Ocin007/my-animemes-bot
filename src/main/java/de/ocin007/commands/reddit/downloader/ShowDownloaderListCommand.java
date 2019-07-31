@@ -14,12 +14,12 @@ import org.json.simple.JSONObject;
 public class ShowDownloaderListCommand extends AbstractCommand {
 
     public ShowDownloaderListCommand() {
-        super(Prefix.DOWNLOADER, Cmd.SHOW);
+        super(Prefix.GENERAL, Cmd.SHOW_DOWNLOADER);
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.DOWNLOADER.literal()+" "+Cmd.SHOW.literal()+" <r/subreddit|'all'>";
+        return Prefix.GENERAL.literal()+" "+Cmd.SHOW_DOWNLOADER.literal()+" <r/subreddit|'all'>";
     }
 
     @Override

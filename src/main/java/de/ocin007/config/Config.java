@@ -20,12 +20,14 @@ public class Config {
     private final static String PATH_TO_WATCHERS = "src/main/resources/json/currentlyWatchedSubReddits.json";
     private final static String PATH_TO_DOWNLOADERS = "src/main/resources/json/memeDownloader.json";
     private final static String PATH_TO_DEFAULT_CMD_GIFS = "src/main/resources/json/defaultCommandGifs.json";
+    private final static String PATH_TO_VIP_ROLES = "src/main/resources/json/vipRoles.json";
 
     private static Config ourInstance;
     private HashMap<String, Properties> propMap;
     private JSONObject watcherObj;
     private JSONObject downloaderObj;
     private JSONArray gifJsonList;
+    private JSONObject vipRoles;
 
     public static Config getInstance() {
         if(ourInstance == null) {
@@ -39,6 +41,7 @@ public class Config {
             this.propMap = new HashMap<>();
             this.watcherObj = new JSONObject();
             this.downloaderObj = new JSONObject();
+            this.vipRoles = new JSONObject();
             this.appendProperty(ConfigKeys.TOKEN.toString(), PATH_TO_CONFIG_PROPERTIES);
             this.appendProperty(ConfigKeys.CMD.toString(), PATH_TO_CMD_PROPERTIES);
             this.appendProperty(ConfigKeys.MSG.toString(), PATH_TO_MSG_PROPERTIES);
@@ -46,9 +49,14 @@ public class Config {
             this.getWatcherJson();
             this.getDownloaderJson();
             this.getDefaultCommandGifs();
+            this.getVipRoles();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void getVipRoles() throws Exception {
+        this.vipRoles = (JSONObject) this.getJSONFromPath(Config.PATH_TO_VIP_ROLES);
     }
 
     private void getDefaultCommandGifs() throws Exception {
@@ -75,6 +83,31 @@ public class Config {
         prop.load(input);
         input.close();
         this.propMap.put(key, prop);
+    }
+
+    public JSONArray getAllVipRoles() {
+        return (JSONArray) this.vipRoles.get("vipRoles");
+    }
+
+    public boolean isVipRole(String role) {
+        JSONArray roles = this.getAllVipRoles();
+        return roles.contains(role);
+    }
+
+    public void addVipRole(String role) {
+        if(!this.isVipRole(role)) {
+            JSONArray roles = this.getAllVipRoles();
+            roles.add(role);
+            this.vipRoles.put("vipRoles", roles);
+            this.updateJsonFile(PATH_TO_VIP_ROLES, this.vipRoles);
+        }
+    }
+
+    public void removeVipRole(String role) {
+        JSONArray roles = this.getAllVipRoles();
+        roles.remove(role);
+        this.vipRoles.put("vipRoles", roles);
+        this.updateJsonFile(PATH_TO_VIP_ROLES, this.vipRoles);
     }
 
     public String getRandomGif() {
@@ -112,14 +145,14 @@ public class Config {
         JSONArray list = (JSONArray) this.watcherObj.get("subreddits");
         this.setSubReddit(name, value, list);
         this.watcherObj.put("subreddits", list);
-        this.updateSubRedditListFile(PATH_TO_WATCHERS, this.watcherObj);
+        this.updateJsonFile(PATH_TO_WATCHERS, this.watcherObj);
     }
 
     public void setDownloader(String name, SubRedditType value) {
         JSONArray list = (JSONArray) this.downloaderObj.get("subreddits");
         this.setSubReddit(name, value, list);
         this.downloaderObj.put("subreddits", list);
-        this.updateSubRedditListFile(PATH_TO_DOWNLOADERS, this.downloaderObj);
+        this.updateJsonFile(PATH_TO_DOWNLOADERS, this.downloaderObj);
     }
 
     private void setSubReddit(String name, SubRedditType value, JSONArray list) {
@@ -140,17 +173,17 @@ public class Config {
         JSONArray list = (JSONArray) this.watcherObj.get("subreddits");
         list.remove(this.getWatcher(name));
         this.watcherObj.put("subreddits", list);
-        this.updateSubRedditListFile(PATH_TO_WATCHERS, this.watcherObj);
+        this.updateJsonFile(PATH_TO_WATCHERS, this.watcherObj);
     }
 
     public void removeDownloader(String name) {
         JSONArray list = (JSONArray) this.downloaderObj.get("subreddits");
         list.remove(this.getDownloader(name));
         this.downloaderObj.put("subreddits", list);
-        this.updateSubRedditListFile(PATH_TO_DOWNLOADERS, this.downloaderObj);
+        this.updateJsonFile(PATH_TO_DOWNLOADERS, this.downloaderObj);
     }
 
-    private void updateSubRedditListFile(String path, JSONObject value) {
+    private void updateJsonFile(String path, JSONObject value) {
         try {
             FileWriter file = new FileWriter(path);
             file.write(value.toJSONString());

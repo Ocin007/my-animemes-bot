@@ -1,6 +1,6 @@
 package de.ocin007.commands.reddit.downloader;
 
-import de.ocin007.commands.AbstractCommand;
+import de.ocin007.commands.AbstractAdminCommand;
 import de.ocin007.config.Config;
 import de.ocin007.config.types.SubRedditType;
 import de.ocin007.enums.Cmd;
@@ -10,17 +10,17 @@ import de.ocin007.enums.TextFace;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.simple.JSONObject;
 
-public class EditDownloaderCommand extends AbstractCommand {
+public class EditDownloaderCommand extends AbstractAdminCommand {
 
     private static final String REMOVE_LAST_ID_FLAG = "rmID";
 
     public EditDownloaderCommand() {
-        super(Prefix.DOWNLOADER, Cmd.EDIT_SUBREDDIT);
+        super(Prefix.ADMIN, Cmd.EDIT_DOWNLOADER);
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.DOWNLOADER.literal() + " " + Cmd.EDIT_SUBREDDIT.literal() + " " +
+        return Prefix.ADMIN.literal() + " " + Cmd.EDIT_DOWNLOADER.literal() + " " +
                 "<r/subreddit> <'hot'|'new'|'rising'|'-'> <'" + REMOVE_LAST_ID_FLAG + "'|'-'>";
     }
 

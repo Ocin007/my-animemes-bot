@@ -37,3 +37,6 @@ my-animemes-bot.iml
 # downloads
 /src/main/resources/json/memeDownloader.json
 /src/main/resources/downloads
+
+# vip list
+/src/main/resources/json/vipRoles.json

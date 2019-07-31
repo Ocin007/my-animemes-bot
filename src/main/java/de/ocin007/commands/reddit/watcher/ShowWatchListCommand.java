@@ -14,12 +14,12 @@ import org.json.simple.JSONObject;
 public class ShowWatchListCommand extends AbstractCommand {
 
     public ShowWatchListCommand() {
-        super(Prefix.WATCHER, Cmd.SHOW);
+        super(Prefix.GENERAL, Cmd.SHOW_WATCHER);
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.WATCHER.literal()+" "+Cmd.SHOW.literal()+" <r/subreddit|'all'>";
+        return Prefix.GENERAL.literal()+" "+Cmd.SHOW_WATCHER.literal()+" <r/subreddit|'all'>";
     }
 
     @Override

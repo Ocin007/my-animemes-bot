@@ -1,6 +1,6 @@
 package de.ocin007.commands.reddit.downloader;
 
-import de.ocin007.commands.AbstractCommand;
+import de.ocin007.commands.AbstractAdminCommand;
 import de.ocin007.config.Config;
 import de.ocin007.config.types.SubRedditType;
 import de.ocin007.enums.Cmd;
@@ -10,15 +10,15 @@ import de.ocin007.enums.TextFace;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.simple.JSONObject;
 
-public class AddDownloaderCommand extends AbstractCommand {
+public class AddDownloaderCommand extends AbstractAdminCommand {
 
     public AddDownloaderCommand() {
-        super(Prefix.DOWNLOADER, Cmd.ADD_SUBREDDIT);
+        super(Prefix.ADMIN, Cmd.ADD_DOWNLOADER);
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.DOWNLOADER.literal()+" "+Cmd.ADD_SUBREDDIT.literal()+" <r/subreddit> <'hot'|'new'|'rising'>";
+        return Prefix.ADMIN.literal()+" "+Cmd.ADD_DOWNLOADER.literal()+" <r/subreddit> <'hot'|'new'|'rising'>";
     }
 
     @Override

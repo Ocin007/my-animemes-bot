@@ -1,7 +1,7 @@
 package de.ocin007.commands.reddit.watcher;
 
 import de.ocin007.Bot;
-import de.ocin007.commands.AbstractCommand;
+import de.ocin007.commands.AbstractAdminCommand;
 import de.ocin007.config.Config;
 import de.ocin007.config.types.SubRedditType;
 import de.ocin007.enums.Cmd;
@@ -12,17 +12,17 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.simple.JSONObject;
 
-public class EditWatcherCommand extends AbstractCommand {
+public class EditWatcherCommand extends AbstractAdminCommand {
 
     private static final String REMOVE_LAST_ID_FLAG = "rmID";
 
     public EditWatcherCommand() {
-        super(Prefix.WATCHER, Cmd.EDIT_SUBREDDIT);
+        super(Prefix.ADMIN, Cmd.EDIT_WATCHER);
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.WATCHER.literal() + " " + Cmd.EDIT_SUBREDDIT.literal() + " " +
+        return Prefix.ADMIN.literal() + " " + Cmd.EDIT_WATCHER.literal() + " " +
                 "<r/subreddit> <'hot'|'new'|'rising'|'-'> <textChannel ID|'-'> <'" + REMOVE_LAST_ID_FLAG + "'|'-'>";
     }
 

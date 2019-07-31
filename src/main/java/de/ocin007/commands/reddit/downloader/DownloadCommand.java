@@ -1,6 +1,6 @@
 package de.ocin007.commands.reddit.downloader;
 
-import de.ocin007.commands.AbstractCommand;
+import de.ocin007.commands.AbstractVipCommand;
 import de.ocin007.commands.ServiceCommand;
 import de.ocin007.config.Config;
 import de.ocin007.config.types.SubRedditType;
@@ -24,22 +24,22 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class DownloadCommand extends AbstractCommand implements ServiceCommand {
+public class DownloadCommand extends AbstractVipCommand implements ServiceCommand {
 
     private Config config;
     private HashMap<String, ScheduledExecutorService> downloadMap;
     private final static String PATH_TO_DOWNLOAD_FOLDER = "src\\main\\resources\\downloads";
 
     public DownloadCommand() {
-        super(Prefix.DOWNLOADER, Cmd.WATCH);
+        super(Prefix.VIP, Cmd.WATCH_DOWNLOADER);
         this.downloadMap = new HashMap<>();
         this.config = Config.getInstance();
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.DOWNLOADER.literal()+" "+Cmd.WATCH.literal()+" <'start'|'stop'> <r/rubreddit|'all'>\n" +
-                Prefix.DOWNLOADER.literal()+" "+Cmd.WATCH.literal()+" <'sync'>";
+        return Prefix.VIP.literal()+" "+Cmd.WATCH_DOWNLOADER.literal()+" <'start'|'stop'> <r/rubreddit|'all'>\n" +
+                Prefix.VIP.literal()+" "+Cmd.WATCH_DOWNLOADER.literal()+" <'sync'>";
     }
 
     @Override

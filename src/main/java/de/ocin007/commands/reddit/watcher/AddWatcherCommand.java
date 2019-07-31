@@ -1,7 +1,7 @@
 package de.ocin007.commands.reddit.watcher;
 
 import de.ocin007.Bot;
-import de.ocin007.commands.AbstractCommand;
+import de.ocin007.commands.AbstractAdminCommand;
 import de.ocin007.config.Config;
 import de.ocin007.config.types.SubRedditType;
 import de.ocin007.enums.Cmd;
@@ -13,15 +13,15 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.simple.JSONObject;
 
 
-public class AddWatcherCommand extends AbstractCommand {
+public class AddWatcherCommand extends AbstractAdminCommand {
 
     public AddWatcherCommand() {
-        super(Prefix.WATCHER, Cmd.ADD_SUBREDDIT);
+        super(Prefix.ADMIN, Cmd.ADD_WATCHER);
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.WATCHER.literal()+" "+Cmd.ADD_SUBREDDIT.literal()+" <r/subreddit> <'hot'|'new'|'rising'> [textChannel ID]";
+        return Prefix.ADMIN.literal()+" "+Cmd.ADD_WATCHER.literal()+" <r/subreddit> <'hot'|'new'|'rising'> [textChannel ID]";
     }
 
     @Override

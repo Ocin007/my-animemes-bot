@@ -5,12 +5,17 @@ import de.ocin007.config.Config;
 public enum Cmd implements ConfigEnum {
     GET_AUTH_URL("cmdGetAuthUrl"),
     AUTHORIZE("cmdAuthorize"),
-    ADD_SUBREDDIT("cmdAddSubReddit"),
-    REMOVE_SUBREDDIT("cmdRemoveSubReddit"),
-    EDIT_SUBREDDIT("cmdEditSubReddit"),
-    SHOW("cmdShowWatchList"),
+    ADD_WATCHER("cmdAddWatcher"),
+    REMOVE_WATCHER("cmdRemoveWatcher"),
+    EDIT_WATCHER("cmdEditWatcher"),
+    ADD_DOWNLOADER("cmdAddDownloader"),
+    REMOVE_DOWNLOADER("cmdRemoveDownloader"),
+    EDIT_DOWNLOADER("cmdEditDownloader"),
+    SHOW_WATCHER("cmdShowWatchList"),
+    SHOW_DOWNLOADER("cmdShowDownloaderList"),
     RANDOM("cmdRandomPost"),
-    WATCH("cmdWatch"),
+    WATCH_DOWNLOADER("cmdWatchDownloader"),
+    WATCH_WATCHER("cmdWatchWatcher"),
     SHUTDOWN("cmdShutdown"),
     HELP("cmdHelp");
 
