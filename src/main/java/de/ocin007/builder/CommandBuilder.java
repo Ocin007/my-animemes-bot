@@ -46,6 +46,7 @@ public class CommandBuilder {
         this.listenersToPrint.add(new RandomCommand());
         this.listenersToPrint.add(new AddVipRoleCommand());
         this.listenersToPrint.add(new RemoveVipRoleCommand());
+        this.listenersToPrint.add(new ShowVipRoleListCommand());
     }
 
     public void build() {

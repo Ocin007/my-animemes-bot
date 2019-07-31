@@ -19,6 +19,7 @@ public enum Cmd implements ConfigEnum {
     SHUTDOWN("cmdShutdown"),
     ADD_VIP_ROLE("cmdAddVipRole"),
     REMOVE_VIP_ROLE("cmdRemoveVipRole"),
+    SHOW_VIP_ROLE("cmdShowVipRole"),
     HELP("cmdHelp");
 
     private String name;
