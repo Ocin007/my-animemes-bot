@@ -16,23 +16,38 @@ public class RemoveVipRoleCommand extends AbstractAdminCommand {
 
     @Override
     public String getCmdSignature() {
-        return Prefix.ADMIN.literal()+" "+Cmd.REMOVE_VIP_ROLE.literal()+" <role ID>";
+        return Prefix.ADMIN.literal()+" "+Cmd.REMOVE_VIP_ROLE.literal()+" <role ID|'all'>";
     }
 
     @Override
     public String getCmdDescription() {
         return "removes a role from the vip-roles. these roles can execute all *"+Prefix.VIP.literal()+"* commands." +
-                "**<role ID>** a role";
+                "**<role ID|'all'>** a specific role, or all roles";
     }
 
     @Override
     protected boolean argsValid(MessageReceivedEvent event, String[] args) {
-        return args.length == 1;
+        if(args.length != 1) {
+            return false;
+        }
+        return args[0].equals("all") || event.getGuild().getRoleById(args[0]) != null;
     }
 
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
         Config config = Config.getInstance();
+        if(args[0].equals("all")) {
+            if(config.removeAllVipRoles()) {
+                event.getTextChannel().sendMessage(
+                        Msg.ROLE_RM_ALL_FROM_VIP.literal()+" "+TextFace.SERIOUS
+                ).queue();
+                return;
+            }
+            event.getTextChannel().sendMessage(
+                    Msg.ROLE_ALR_RM_ALL_FROM_VIP.literal()+" "+TextFace.IDK
+            ).queue();
+            return;
+        }
         String roleMention = event.getGuild().getRoleById(args[0]).getAsMention();
         if(config.removeVipRole(args[0])) {
             event.getTextChannel().sendMessage(

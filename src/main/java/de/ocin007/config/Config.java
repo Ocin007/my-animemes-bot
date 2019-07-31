@@ -116,6 +116,17 @@ public class Config {
         return false;
     }
 
+    public boolean removeAllVipRoles() {
+        if(!this.getAllVipRoles().isEmpty()) {
+            JSONArray roles = this.getAllVipRoles();
+            roles.clear();
+            this.vipRoles.put("vipRoles", roles);
+            this.updateJsonFile(PATH_TO_VIP_ROLES, this.vipRoles);
+            return true;
+        }
+        return false;
+    }
+
     public String getRandomGif() {
         return (String) this.gifJsonList.get(new Random().nextInt(this.gifJsonList.size()));
     }
