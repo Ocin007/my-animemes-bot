@@ -2,6 +2,7 @@ package de.ocin007.commands.general;
 
 import de.ocin007.Bot;
 import de.ocin007.commands.AbstractCommand;
+import de.ocin007.commands.AbstractOwnerCommand;
 import de.ocin007.commands.ServiceCommand;
 import de.ocin007.enums.Cmd;
 import de.ocin007.enums.Msg;
@@ -13,18 +14,18 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.Collection;
 
-public class ShutdownCommand extends AbstractCommand {
+public class ShutdownCommand extends AbstractOwnerCommand {
 
     private Collection<AbstractCommand> cmdList;
 
     public ShutdownCommand(Collection<AbstractCommand> cmdList) {
-        super(Prefix.GENERAL, Cmd.SHUTDOWN);
+        super(Prefix.OWNER, Cmd.SHUTDOWN);
         this.cmdList = cmdList;
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.GENERAL.literal()+" "+Cmd.SHUTDOWN.literal();
+        return Prefix.OWNER.literal()+" "+Cmd.SHUTDOWN.literal();
     }
 
     @Override
