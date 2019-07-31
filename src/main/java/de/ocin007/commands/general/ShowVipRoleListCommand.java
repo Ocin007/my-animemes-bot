@@ -43,7 +43,7 @@ public class ShowVipRoleListCommand extends AbstractCommand {
         StringBuilder msg = new StringBuilder("**These roles are authorized to use *" + Prefix.VIP.literal() + "* commands:** \n```");
         for (Object o : roles) {
             String roleId = (String) o;
-            msg.append(event.getGuild().getRoleById(roleId).getName());
+            msg.append(event.getGuild().getRoleById(roleId).getName()).append("\n");
         }
         msg.append("```");
         event.getTextChannel().sendMessage(msg.toString()).queue();
