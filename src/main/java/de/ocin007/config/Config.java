@@ -105,11 +105,15 @@ public class Config {
         return false;
     }
 
-    public void removeVipRole(String role) {
-        JSONArray roles = this.getAllVipRoles();
-        roles.remove(role);
-        this.vipRoles.put("vipRoles", roles);
-        this.updateJsonFile(PATH_TO_VIP_ROLES, this.vipRoles);
+    public boolean removeVipRole(String role) {
+        if(this.isVipRole(role)) {
+            JSONArray roles = this.getAllVipRoles();
+            roles.remove(role);
+            this.vipRoles.put("vipRoles", roles);
+            this.updateJsonFile(PATH_TO_VIP_ROLES, this.vipRoles);
+            return true;
+        }
+        return false;
     }
 
     public String getRandomGif() {

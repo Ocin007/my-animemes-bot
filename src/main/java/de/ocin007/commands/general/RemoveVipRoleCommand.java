@@ -8,42 +8,40 @@ import de.ocin007.enums.Prefix;
 import de.ocin007.enums.TextFace;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-public class AddVipRoleCommand extends AbstractAdminCommand {
+public class RemoveVipRoleCommand extends AbstractAdminCommand {
 
-    public AddVipRoleCommand() {
-        super(Prefix.ADMIN, Cmd.ADD_VIP_ROLE);
+    public RemoveVipRoleCommand() {
+        super(Prefix.ADMIN, Cmd.REMOVE_VIP_ROLE);
     }
 
     @Override
     public String getCmdSignature() {
-        return Prefix.ADMIN.literal()+" "+Cmd.ADD_VIP_ROLE.literal()+" <role ID>";
+        return Prefix.ADMIN.literal()+" "+Cmd.REMOVE_VIP_ROLE.literal()+" <role ID>";
     }
 
     @Override
     public String getCmdDescription() {
-        return "adds a role to the vip-roles. these roles can execute all *"+Prefix.VIP.literal()+"* commands." +
+        return "removes a role from the vip-roles. these roles can execute all *"+Prefix.VIP.literal()+"* commands." +
                 "**<role ID>** a role";
     }
 
     @Override
     protected boolean argsValid(MessageReceivedEvent event, String[] args) {
-        if(args.length != 1) {
-            return false;
-        }
-        return event.getGuild().getRoleById(args[0]) != null;
+        return args.length == 1;
     }
 
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
+        Config config = Config.getInstance();
         String roleMention = event.getGuild().getRoleById(args[0]).getAsMention();
-        if(Config.getInstance().addVipRole(args[0])) {
+        if(config.removeVipRole(args[0])) {
             event.getTextChannel().sendMessage(
-                    roleMention+": "+Msg.ROLE_ADDED_TO_VIP.literal()+" "+TextFace.HAPPY
+                    roleMention+": "+Msg.ROLE_RM_FROM_VIP.literal()+" "+TextFace.SERIOUS
             ).queue();
             return;
         }
         event.getTextChannel().sendMessage(
-                Msg.ROLE_ALR_ADDED_TO_VIP.literal() + " " + TextFace.IDK
+                Msg.ROLE_ALR_RM_FROM_VIP.literal() + " " + TextFace.IDK
         ).queue();
     }
 }
