@@ -2,8 +2,12 @@ package de.ocin007.commands.reddit;
 
 import de.ocin007.commands.AbstractOwnerCommand;
 import de.ocin007.enums.Cmd;
+import de.ocin007.enums.Msg;
 import de.ocin007.enums.Prefix;
+import de.ocin007.enums.TextFace;
 import de.ocin007.http.reddit.RedditApi;
+import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class AuthUrlCommand extends AbstractOwnerCommand {
@@ -35,6 +39,13 @@ public class AuthUrlCommand extends AbstractOwnerCommand {
 
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
-        event.getTextChannel().sendMessage(this.api.getAuthorisationUrl()).queue();
+        if(!event.isFromType(ChannelType.PRIVATE)) {
+            event.getTextChannel().sendMessage(
+                    Msg.USE_PRIVATE.literal()+" "+TextFace.REALLY
+            ).queue();
+            return;
+        }
+        PrivateChannel channel = event.getAuthor().openPrivateChannel().complete();
+        channel.sendMessage(this.api.getAuthorisationUrl()).queue();
     }
 }

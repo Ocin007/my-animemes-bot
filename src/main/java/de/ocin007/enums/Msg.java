@@ -7,6 +7,7 @@ public enum Msg implements ConfigEnum {
     UNAUTHORIZED("msgUnauthorized"),
     SUCCESS("msgSuccess"),
     ERROR("msgError"),
+    USE_PRIVATE("msgUsePrivate"),
     SUB_ALR_EXIST("msgSubAlreadyExist"),
     SUB_NOT_EXIST("msgSubNotExist"),
     WATCHLIST_EMPTY("msgWatchListEmpty"),

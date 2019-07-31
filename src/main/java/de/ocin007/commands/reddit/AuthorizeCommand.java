@@ -6,6 +6,8 @@ import de.ocin007.enums.Msg;
 import de.ocin007.enums.Prefix;
 import de.ocin007.enums.TextFace;
 import de.ocin007.http.reddit.RedditApi;
+import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class AuthorizeCommand extends AbstractOwnerCommand {
@@ -34,14 +36,21 @@ public class AuthorizeCommand extends AbstractOwnerCommand {
 
     @Override
     public void execute(MessageReceivedEvent event, String[] args) {
+        if(!event.isFromType(ChannelType.PRIVATE)) {
+            event.getTextChannel().sendMessage(
+                    Msg.USE_PRIVATE.literal()+" "+TextFace.REALLY
+            ).queue();
+            return;
+        }
         RedditApi api = new RedditApi();
         boolean success = api.authorize(args[0]);
+        PrivateChannel channel = event.getAuthor().openPrivateChannel().complete();
         if(success) {
-            event.getTextChannel().sendMessage(
+            channel.sendMessage(
                     Msg.SUCCESS.literal()+" "+TextFace.HAPPY
             ).queue();
         } else {
-            event.getTextChannel().sendMessage(
+            channel.sendMessage(
                     Msg.ERROR.literal()+" "+TextFace.TABLE_FLIP
             ).queue();
         }
