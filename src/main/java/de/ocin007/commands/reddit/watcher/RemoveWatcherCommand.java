@@ -26,7 +26,7 @@ public class RemoveWatcherCommand extends AbstractAdminCommand {
     }
 
     @Override
-    protected boolean argsValid(String[] args) {
+    protected boolean argsValid(MessageReceivedEvent event, String[] args) {
         if(args.length != 1) {
             return false;
         }

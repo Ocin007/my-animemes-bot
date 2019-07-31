@@ -31,6 +31,8 @@ public enum Msg implements ConfigEnum {
     INVALID_ARGS("msgInvalidArgs"),
     SHUTDOWN("msgShutdown"),
     HELLO("msgHello"),
+    ROLE_ADDED_TO_VIP("msgRoleAddedToVip"),
+    ROLE_ALR_ADDED_TO_VIP("msgRoleAlrAddedToVip"),
     RESTART_SERVICES("msgServicesStarted"),
     PAUSED_WATCHING_ALL("msgPausedWatchingAll"),
     PAUSED_DOWNLOADING_ALL("msgPausedDownloadingAll"),

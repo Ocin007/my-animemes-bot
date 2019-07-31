@@ -42,7 +42,7 @@ public abstract class AbstractCommand extends ListenerAdapter {
     }
 
     void execIfArgsValid(MessageReceivedEvent event, String[] args) {
-        if(this.argsValid(args)) {
+        if(this.argsValid(event, args)) {
             try {
                 this.execute(event, args);
             } catch (Exception e) {
@@ -63,7 +63,7 @@ public abstract class AbstractCommand extends ListenerAdapter {
 
     public abstract String getCmdDescription();
 
-    protected abstract boolean argsValid(String[] args);
+    protected abstract boolean argsValid(MessageReceivedEvent event, String[] args);
 
     abstract public void execute(MessageReceivedEvent event, String[] args) throws Exception;
 }

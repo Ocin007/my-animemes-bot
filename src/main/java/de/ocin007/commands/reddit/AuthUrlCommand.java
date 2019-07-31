@@ -33,7 +33,7 @@ public class AuthUrlCommand extends AbstractOwnerCommand {
     }
 
     @Override
-    protected boolean argsValid(String[] args) {
+    protected boolean argsValid(MessageReceivedEvent event, String[] args) {
         return true;
     }
 

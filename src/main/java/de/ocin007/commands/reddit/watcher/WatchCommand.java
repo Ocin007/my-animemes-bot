@@ -48,7 +48,7 @@ public class WatchCommand extends AbstractVipCommand implements ServiceCommand {
     }
 
     @Override
-    protected boolean argsValid(String[] args) {
+    protected boolean argsValid(MessageReceivedEvent event, String[] args) {
         if(args.length == 1 && args[0].equals("sync")) {
             return true;
         }

@@ -30,7 +30,7 @@ public class AuthorizeCommand extends AbstractOwnerCommand {
     }
 
     @Override
-    protected boolean argsValid(String[] args) {
+    protected boolean argsValid(MessageReceivedEvent event, String[] args) {
         return args.length == 1;
     }
 

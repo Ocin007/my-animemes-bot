@@ -17,6 +17,8 @@ public enum Cmd implements ConfigEnum {
     WATCH_DOWNLOADER("cmdWatchDownloader"),
     WATCH_WATCHER("cmdWatchWatcher"),
     SHUTDOWN("cmdShutdown"),
+    ADD_VIP_ROLE("cmdAddVipRole"),
+    REMOVE_VIP_ROLE("cmdRemoveVipRole"),
     HELP("cmdHelp");
 
     private String name;

@@ -94,13 +94,15 @@ public class Config {
         return roles.contains(role);
     }
 
-    public void addVipRole(String role) {
+    public boolean addVipRole(String role) {
         if(!this.isVipRole(role)) {
             JSONArray roles = this.getAllVipRoles();
             roles.add(role);
             this.vipRoles.put("vipRoles", roles);
             this.updateJsonFile(PATH_TO_VIP_ROLES, this.vipRoles);
+            return true;
         }
+        return false;
     }
 
     public void removeVipRole(String role) {

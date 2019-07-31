@@ -37,7 +37,7 @@ public class EditWatcherCommand extends AbstractAdminCommand {
     }
 
     @Override
-    protected boolean argsValid(String[] args) {
+    protected boolean argsValid(MessageReceivedEvent event, String[] args) {
         if (args.length != 4) {
             return false;
         }

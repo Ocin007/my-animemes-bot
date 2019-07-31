@@ -51,7 +51,7 @@ public class DownloadCommand extends AbstractVipCommand implements ServiceComman
     }
 
     @Override
-    protected boolean argsValid(String[] args) {
+    protected boolean argsValid(MessageReceivedEvent event, String[] args) {
         if(args.length == 1 && args[0].equals("sync")) {
             return true;
         }

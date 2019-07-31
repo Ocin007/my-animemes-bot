@@ -24,7 +24,7 @@ public class RandomCommand extends AbstractCommand {
     }
 
     @Override
-    protected boolean argsValid(String[] args) {
+    protected boolean argsValid(MessageReceivedEvent event, String[] args) {
         return true;
     }
 
