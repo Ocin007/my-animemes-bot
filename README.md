@@ -11,7 +11,7 @@ ___
 1. [Installation](#installation)
 2. [Commands](#commands)
 3. [List of commands](#list-of-commands)
-4. [Example: Let the bot print some posts from a SubReddit](#example-let-the-bot-print-some-posts-from-a-subReddit)
+4. [Example: Let the bot print some posts from a SubReddit](#example:-let-the-bot-print-some-posts-from-a-subreddit)
 
 ## Installation
 1) Create a new Discord Bot [here](https://discordapp.com/developers/applications/)
