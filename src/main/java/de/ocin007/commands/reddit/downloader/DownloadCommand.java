@@ -44,10 +44,10 @@ public class DownloadCommand extends AbstractVipCommand implements ServiceComman
 
     @Override
     public String getCmdDescription() {
-        return "starts/stops watching in subreddit for posts\n" +
-                "**<'start'|'stop'>** starts/stops watching\n" +
+        return "starts/stops downloading images from subreddit\n" +
+                "**<'start'|'stop'>** starts/stops downloading\n" +
                 "**<r/*subreddit*|'all'>** an existing subreddit, has to start with 'r/', or just 'all'\n" +
-                "**<'sync'>** stops and restarts every active watcher";
+                "**<'sync'>** stops and restarts every active downloader";
     }
 
     @Override

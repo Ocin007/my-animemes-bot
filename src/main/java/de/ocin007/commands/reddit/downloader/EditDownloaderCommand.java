@@ -26,7 +26,7 @@ public class EditDownloaderCommand extends AbstractAdminCommand {
 
     @Override
     public String getCmdDescription() {
-        return "edits an existing subreddit. use '-' if you dont want to change a parameter\n" +
+        return "edits an existing subreddit in downloaderlist. use '-' if you dont want to change a parameter\n" +
                 "**<r/*subreddit*>** an existing subreddit, has to start with 'r/'\n" +
                 "**<'hot'|'new'|'rising'|'-'>** sorts subreddit by hot|new|rising\n" +
                 "**<'" + REMOVE_LAST_ID_FLAG + "'|->** when '" + REMOVE_LAST_ID_FLAG + "' is set, " +

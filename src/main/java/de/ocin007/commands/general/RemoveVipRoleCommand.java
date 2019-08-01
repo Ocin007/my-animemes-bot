@@ -21,7 +21,7 @@ public class RemoveVipRoleCommand extends AbstractAdminCommand {
 
     @Override
     public String getCmdDescription() {
-        return "removes a role from the vip-roles. these roles can execute all *"+Prefix.VIP.literal()+"* commands." +
+        return "removes a role from the vip-roles. these roles can execute all *"+Prefix.VIP.literal()+"* commands.\n" +
                 "**<role ID|'all'>** a specific role, or all roles";
     }
 

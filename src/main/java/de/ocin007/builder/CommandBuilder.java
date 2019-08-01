@@ -29,24 +29,24 @@ public class CommandBuilder {
     }
 
     private void appendAllListeners() {
-        this.listenersToPrint.add(new ShutdownCommand(this.listenersToPrint));
-        this.listenersToPrint.add(new HelpCommand(this.listenersToPrint));
-        this.listenersToPrint.add(new AuthUrlCommand());
         this.listenersToPrint.add(new AuthorizeCommand());
-        this.listenersToPrint.add(new AddWatcherCommand());
+        this.listenersToPrint.add(new AuthUrlCommand());
+        this.listenersToPrint.add(new ShutdownCommand(this.listenersToPrint));
         this.listenersToPrint.add(new AddDownloaderCommand());
-        this.listenersToPrint.add(new RemoveWatcherCommand());
-        this.listenersToPrint.add(new RemoveDownloaderCommand());
-        this.listenersToPrint.add(new EditWatcherCommand());
-        this.listenersToPrint.add(new EditDownloaderCommand());
-        this.listenersToPrint.add(new ShowWatchListCommand());
-        this.listenersToPrint.add(new ShowDownloaderListCommand());
-        this.listenersToPrint.add(new WatchCommand());
-        this.listenersToPrint.add(new DownloadCommand());
-        this.listenersToPrint.add(new RandomCommand());
         this.listenersToPrint.add(new AddVipRoleCommand());
+        this.listenersToPrint.add(new AddWatcherCommand());
+        this.listenersToPrint.add(new EditDownloaderCommand());
+        this.listenersToPrint.add(new EditWatcherCommand());
+        this.listenersToPrint.add(new RemoveDownloaderCommand());
         this.listenersToPrint.add(new RemoveVipRoleCommand());
+        this.listenersToPrint.add(new RemoveWatcherCommand());
+        this.listenersToPrint.add(new DownloadCommand());
+        this.listenersToPrint.add(new WatchCommand());
+        this.listenersToPrint.add(new HelpCommand(this.listenersToPrint));
+        this.listenersToPrint.add(new RandomCommand());
+        this.listenersToPrint.add(new ShowDownloaderListCommand());
         this.listenersToPrint.add(new ShowVipRoleListCommand());
+        this.listenersToPrint.add(new ShowWatchListCommand());
     }
 
     public void build() {

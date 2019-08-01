@@ -21,7 +21,7 @@ public class RemoveWatcherCommand extends AbstractAdminCommand {
 
     @Override
     public String getCmdDescription() {
-        return "removes an existing subreddit\n" +
+        return "removes an existing subreddit from watchlist\n" +
                 "**<r/*subreddit*>** an existing subreddit, has to start with 'r/'";
     }
 

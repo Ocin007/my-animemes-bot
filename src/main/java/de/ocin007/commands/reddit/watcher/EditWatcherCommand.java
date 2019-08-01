@@ -28,7 +28,7 @@ public class EditWatcherCommand extends AbstractAdminCommand {
 
     @Override
     public String getCmdDescription() {
-        return "edits an existing subreddit. use '-' if you dont want to change a parameter\n" +
+        return "edits an existing subreddit in watchlist. use '-' if you dont want to change a parameter\n" +
                 "**<r/*subreddit*>** an existing subreddit, has to start with 'r/'\n" +
                 "**<'hot'|'new'|'rising'|'-'>** sorts subreddit by hot|new|rising\n" +
                 "**<textChannel ID|'-'>** sets a new channel where the reddit stuff gets printed\n" +

@@ -21,7 +21,7 @@ public class AddVipRoleCommand extends AbstractAdminCommand {
 
     @Override
     public String getCmdDescription() {
-        return "adds a role to the vip-roles. these roles can execute all *"+Prefix.VIP.literal()+"* commands." +
+        return "adds a role to the vip-roles. these roles can execute all *"+Prefix.VIP.literal()+"* commands.\n" +
                 "**<role ID>** a role";
     }
 
