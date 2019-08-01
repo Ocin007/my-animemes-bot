@@ -1,8 +1,6 @@
 # my-animemes-bot
 My first discord bot. Add some SubReddits and let the Bot print some Reddit posts into your Discord server.
 
-![example](https://github.com/Ocin007/my-animemes-bot/tree/master/src/main/resources/example/example.PNG)
-
 Used [JDA (Java Discord API)](https://github.com/DV8FromTheWorld/JDA)
 
 build / run jar:
