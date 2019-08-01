@@ -8,6 +8,9 @@ defaultChannelId=
 clientId=
 clientSecret=
 
+# for user-agent header, username without 'u/'
+redditUsername=
+platform=windows
 
 
 

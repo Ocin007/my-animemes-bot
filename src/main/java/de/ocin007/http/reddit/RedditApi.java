@@ -110,7 +110,9 @@ public class RedditApi {
     }
 
     private void addAuthHeaders(HttpHandler http) {
-        http.addHeader("User-Agent", "windows:discord-bot.my-animemes-bot:1.0-SNAPSHOT (by /u/Ocin007)");
+        String platform = Config.getInstance().getConfig("platform");
+        String username = Config.getInstance().getConfig("redditUsername");
+        http.addHeader("User-Agent", platform+":discord-bot.my-animemes-bot:1.0-SNAPSHOT (by /u/"+username+")");
         String credentials = Config.getInstance().getConfig("clientId") + ":" + Config.getInstance().getConfig("clientSecret");
         String encodedCredentials = Base64.encodeBase64String(credentials.getBytes());
         http.addHeader("Authorization", "Basic "+encodedCredentials);
