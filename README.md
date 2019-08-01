@@ -11,6 +11,7 @@ ___
 1. [Installation](#installation)
 2. [Commands](#commands)
 3. [List of commands](#list-of-commands)
+4. [Example: Let the bot print some posts from a SubReddit](#example-let-the-bot-print-some-posts-from-a-subReddit)
 
 ## Installation
 1) Create a new Discord Bot [here](https://discordapp.com/developers/applications/)
@@ -208,3 +209,12 @@ Description:     Prints out all params of the given subreddit,
                  or prints everything when 'all' is given
                  <r/subreddit|'all'> an existing subreddit, has to start with 'r/', or just 'all'
 ```
+
+## Example: Let the bot print some posts from a SubReddit
+
+We want the bot to print posts from [r/Animemes/new](https://www.reddit.com/r/Animemes/new/) in a channel 'reddit-posts' with the ID 123456798.
+
+- First we add the Subreddit: ``!dono wtadd r/Animemes new 123456789``
+- Then we start the watcher: ``!san wtwatch start r/Animemes``
+- Now the bot prints 5 posts every 15 minutes.
+- If we have seen enough posts, we do ``!san wtwatch stop r/Animemes``
