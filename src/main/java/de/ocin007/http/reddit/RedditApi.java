@@ -1,6 +1,7 @@
 package de.ocin007.http.reddit;
 
 
+import de.ocin007.builder.reddit.SubRedditPost;
 import de.ocin007.config.Config;
 import de.ocin007.config.types.SubRedditType;
 import de.ocin007.enums.routes.reddit.Route;
@@ -63,7 +64,10 @@ public class RedditApi {
         );
         http.addParam("limit", limit.toString());
         if(sub.getLastPostId() != null) {
-            http.addParam("before", sub.getLastPostId());
+            String lastPostId = this.getLastPostId(sub);
+            if(lastPostId != null) {
+                http.addParam("before", lastPostId);
+            }
         }
         this.addBearer(http);
         JSONObject res = http.get();
@@ -72,6 +76,48 @@ public class RedditApi {
         }
         JSONObject data = (JSONObject) res.get("data");
         return (JSONArray) data.get("children");
+    }
+
+    private String getLastPostId(SubRedditType sub) throws Exception {
+        SubRedditPost lastPost = this.getPostById(sub.getLastPostId(), sub.getSubreddit());
+        if(lastPost != null) {
+            if(!lastPost.isRemoved()) {
+                return lastPost.getPostId();
+            }
+        }
+        System.out.println("post removed: "+sub.getLastPostId()+", looking for other id's");
+        JSONArray idList = sub.getFallback();
+        for (int i = idList.size() - 1; i >= 0; i--) {
+            lastPost = this.getPostById((String) idList.get(i), sub.getSubreddit());
+            if(lastPost != null) {
+                if(!lastPost.isRemoved()) {
+                    return lastPost.getPostId();
+                }
+            }
+            System.out.println("post removed: "+idList.get(i));
+        }
+        return null;
+    }
+
+    private SubRedditPost getPostById(String id, String subName) throws Exception {
+        String url = API_OAUTH_BASE_URL+"/"+subName+Route.SINGLE_POST;
+        HttpHandler http = new HttpHandler(url);
+        http.addParam("id", id);
+        this.addBearer(http);
+        JSONObject res = http.get();
+        if(res.get("error") != null || res.get("data") == null) {
+            return null;
+        }
+        JSONObject data = (JSONObject) res.get("data");
+        if(data.get("children") == null) {
+            return null;
+        }
+        JSONArray list = (JSONArray) data.get("children");
+        if(list.isEmpty()) {
+            return null;
+        }
+        JSONObject post = (JSONObject) list.get(0);
+        return new SubRedditPost((JSONObject) post.get("data"));
     }
 
     public JSONObject getRandomPost() throws Exception {

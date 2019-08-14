@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
@@ -238,11 +239,16 @@ public class DownloadCommand extends AbstractVipCommand implements ServiceComman
                     e.printStackTrace();
                     return;
                 }
+                JSONArray fallback = sub.getFallback();
                 for (int i = posts.size() - 1; i >= 0; i--) {
                     JSONObject o = (JSONObject) posts.get(i);
                     JSONObject post = (JSONObject) o.get("data");
                     if(post.get("post_hint") != null && post.get("url") != null) {
                         if(!(boolean)post.get("stickied") && post.get("post_hint").equals("image")) {
+                            if(fallback.size() > 3) {
+                                fallback.remove(0);
+                            }
+                            fallback.add(sub.getLastPostId());
                             sub.setLastPostId((String) post.get("name"));
                             sub.setTimestamp(
                                     new Double(post.get("created_utc").toString()).longValue()
@@ -251,6 +257,7 @@ public class DownloadCommand extends AbstractVipCommand implements ServiceComman
                         }
                     }
                 }
+                sub.setFallback(fallback);
                 config.setDownloader(subName, sub);
             } catch (Exception e) {
                 System.out.println(subName+": Downloader stopped");

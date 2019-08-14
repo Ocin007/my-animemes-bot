@@ -10,6 +10,7 @@ import de.ocin007.enums.Prefix;
 import de.ocin007.enums.TextFace;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class EditWatcherCommand extends AbstractAdminCommand {
@@ -79,6 +80,7 @@ public class EditWatcherCommand extends AbstractAdminCommand {
         if (!args[3].equals("-")) {
             sub.setLastPostId(null);
             sub.setTimestamp(null);
+            sub.setFallback(new JSONArray());
         }
         config.setWatcher(sub.getSubreddit(), sub);
         event.getTextChannel().sendMessage(

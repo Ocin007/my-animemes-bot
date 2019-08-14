@@ -2,6 +2,7 @@ package de.ocin007.builder.reddit;
 
 import de.ocin007.config.types.SubRedditType;
 import de.ocin007.http.reddit.RedditApi;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class SubRedditPost {
@@ -20,10 +21,20 @@ public class SubRedditPost {
                 (String) post.get("subreddit_name_prefixed"),
                 "random",
                 null,
+                new JSONArray(),
                 null,
                 null,
                 null
         );
+    }
+
+    public String getPostId() {
+        return (String) this.post.get("name");
+    }
+
+    public boolean isRemoved() {
+        //can_gild
+        return !((boolean) this.post.get("is_crosspostable"));
     }
 
     @Override

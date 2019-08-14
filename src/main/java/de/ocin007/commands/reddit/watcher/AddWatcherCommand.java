@@ -10,6 +10,7 @@ import de.ocin007.enums.Prefix;
 import de.ocin007.enums.TextFace;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 
@@ -65,6 +66,7 @@ public class AddWatcherCommand extends AbstractAdminCommand {
                 args[0],
                 args[1],
                 null,
+                new JSONArray(),
                 null,
                 false,
                 channel

@@ -2,6 +2,7 @@ package de.ocin007.config.types;
 
 import de.ocin007.Bot;
 import de.ocin007.http.reddit.RedditApi;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class SubRedditType {
@@ -13,6 +14,7 @@ public class SubRedditType {
     private String subreddit;
     private String sortBy;
     private String lastPostId;
+    private JSONArray fallback;
     private Long timestamp;
     private Boolean currentlyWatched;
     private String textChannel;
@@ -21,14 +23,15 @@ public class SubRedditType {
             String subreddit,
             String sortBy,
             String lastPostId,
+            JSONArray fallback,
             Long timestamp,
             Boolean currentlyWatched,
             String textChannel
     ) {
-
         this.subreddit = subreddit;
         this.sortBy = sortBy;
         this.lastPostId = lastPostId;
+        this.fallback = fallback;
         this.timestamp = timestamp;
         this.currentlyWatched = currentlyWatched;
         this.textChannel = textChannel;
@@ -38,6 +41,7 @@ public class SubRedditType {
         this.subreddit = (String)obj.get("subreddit");
         this.sortBy = (String)obj.get("sortBy");
         this.lastPostId = (String)obj.get("lastPostId");
+        this.fallback = (JSONArray)obj.get("fallback");
         this.timestamp = (Long)obj.get("timestamp");
         this.currentlyWatched = (Boolean)obj.get("currentlyWatched");
         this.textChannel = (String)obj.get("textChannel");
@@ -81,6 +85,14 @@ public class SubRedditType {
         this.lastPostId = lastPostId;
     }
 
+    public JSONArray getFallback() {
+        return fallback;
+    }
+
+    public void setFallback(JSONArray fallback) {
+        this.fallback = fallback;
+    }
+
     public Long getTimestamp() {
         return timestamp;
     }
@@ -114,6 +126,7 @@ public class SubRedditType {
         obj.put("subreddit", this.subreddit);
         obj.put("sortBy", this.sortBy);
         obj.put("lastPostId", this.lastPostId);
+        obj.put("fallback", this.fallback);
         obj.put("timestamp", this.timestamp);
         obj.put("currentlyWatched", this.currentlyWatched);
         obj.put("textChannel", this.textChannel);

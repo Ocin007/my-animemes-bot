@@ -16,6 +16,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
@@ -243,6 +244,7 @@ public class WatchCommand extends AbstractVipCommand implements ServiceCommand {
                     return;
                 }
                 int count = 0;
+                JSONArray fallback = sub.getFallback();
                 for (int i = posts.size() - 1; i >= 0; i--) {
                     JSONObject o = (JSONObject) posts.get(i);
                     JSONObject post = (JSONObject) o.get("data");
@@ -250,6 +252,10 @@ public class WatchCommand extends AbstractVipCommand implements ServiceCommand {
                         break;
                     } else if(!(boolean)post.get("stickied")) {
                         channel.sendMessage(new SubRedditPost(post, sub).toString()).queue();
+                        if(fallback.size() > 3) {
+                            fallback.remove(0);
+                        }
+                        fallback.add(sub.getLastPostId());
                         sub.setLastPostId((String) post.get("name"));
                         sub.setTimestamp(
                                 new Double(post.get("created_utc").toString()).longValue()
@@ -257,6 +263,7 @@ public class WatchCommand extends AbstractVipCommand implements ServiceCommand {
                         count++;
                     }
                 }
+                sub.setFallback(fallback);
                 config.setWatcher(subName, sub);
             } catch (Exception e) {
                 channel.sendMessage(

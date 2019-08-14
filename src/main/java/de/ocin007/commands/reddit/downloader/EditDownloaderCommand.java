@@ -8,6 +8,7 @@ import de.ocin007.enums.Msg;
 import de.ocin007.enums.Prefix;
 import de.ocin007.enums.TextFace;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class EditDownloaderCommand extends AbstractAdminCommand {
@@ -67,6 +68,7 @@ public class EditDownloaderCommand extends AbstractAdminCommand {
         if (!args[2].equals("-")) {
             sub.setLastPostId(null);
             sub.setTimestamp(null);
+            sub.setFallback(new JSONArray());
         }
         config.setDownloader(sub.getSubreddit(), sub);
         event.getTextChannel().sendMessage(

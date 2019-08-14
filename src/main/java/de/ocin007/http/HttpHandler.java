@@ -44,7 +44,10 @@ public class HttpHandler {
                 httpGet.addHeader(pair.getName(), pair.getValue());
             }
             HttpResponse response = this.httpClient.execute(httpGet);
-            System.out.println("GET: "+response.getStatusLine());
+            System.out.println("\nGET: "+response.getStatusLine());
+            System.out.println("  "+Arrays.toString(response.getHeaders("X-Ratelimit-Used")));
+            System.out.println("  "+Arrays.toString(response.getHeaders("X-Ratelimit-Remaining")));
+            System.out.println("  "+Arrays.toString(response.getHeaders("X-Ratelimit-Reset")));
             HttpEntity entity = response.getEntity();
             return this.getResponse(entity);
         } catch (Exception e) {
@@ -92,7 +95,10 @@ public class HttpHandler {
                 httpPost.addHeader(pair.getName(), pair.getValue());
             }
             HttpResponse response = this.httpClient.execute(httpPost);
-            System.out.println("POST: "+response.getStatusLine());
+            System.out.println("\nPOST: "+response.getStatusLine());
+            System.out.println("  "+Arrays.toString(response.getHeaders("X-Ratelimit-Used")));
+            System.out.println("  "+Arrays.toString(response.getHeaders("X-Ratelimit-Remaining")));
+            System.out.println("  "+Arrays.toString(response.getHeaders("X-Ratelimit-Reset")));
             HttpEntity entity = response.getEntity();
             return this.getResponse(entity);
         } catch (Exception e) {
